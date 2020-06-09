@@ -100,53 +100,52 @@ class MyPromise {
     const promise2 = new MyPromise((resolve, reject) => {
       // resolve/reject 被同步调用后，状态变为 fulfilled/rejected
       if (this.state === MyPromise.states.FULFILLED) {
-        // 不论 promise1 被 reject 还是被 resolve 时 promise2 都会被 resolve
-        // 只有出现异常时才会被 rejected
-        try {
-          // 用 setTimeout 模拟微任务
-          setTimeout(() => {
+        // 用 setTimeout 模拟微任务
+        setTimeout(() => {
+          // 不论 promise1 被 reject 还是被 resolve 时 promise2 都会被 resolve，只有出现异常时才会被 rejected
+          try {
             const x = onFulfilled(this.value);
             // TODO 如果 x 又是一个 Promise 呢?
-            resolve(x);
-          });
-        } catch (e) {
-          // promise2 的拒因
-          reject(e);
-        }
+            MyPromise.resolvePromise(this, promise2, x, resolve, reject);
+          } catch (e) {
+            // promise2 的拒因
+            reject(e);
+          }
+        });
       }
       if (this.state === MyPromise.states.REJECTED) {
-        try {
-          setTimeout(() => {
+        setTimeout(() => {
+          try {
             const x = onRejected(this.reason);
-            resolve(x);
-          });
-        } catch (e) {
-          reject(e);
-        }
+            MyPromise.resolvePromise(this, promise2, x, resolve, reject);
+          } catch (e) {
+            reject(e);
+          }
+        });
       }
 
       // 处理 resolve/reject 被异步调用的情况，将回调函数 push 到队列中
       if (this.state === MyPromise.states.PENDING) {
         // 形参 value，实参为 resolve 方法调用时传入的 this.value
         this.onFulfilledCallbacks.push((value) => {
-          try {
-            setTimeout(() => {
+          setTimeout(() => {
+            try {
               const x = onFulfilled(value);
-              resolve(x);
-            });
-          } catch (e) {
-            reject(e);
-          }
+              MyPromise.resolvePromise(this, promise2, x, resolve, reject);
+            } catch (e) {
+              reject(e);
+            }
+          });
         });
         this.onRejectedCallbacks.push((reason) => {
-          try {
-            setTimeout(() => {
+          setTimeout(() => {
+            try {
               const x = onRejected(reason);
-              resolve(x);
-            });
-          } catch (e) {
-            reject(e);
-          }
+              MyPromise.resolvePromise(this, promise2, x, resolve, reject);
+            } catch (e) {
+              reject(e);
+            }
+          });
         });
       }
     });
@@ -155,12 +154,58 @@ class MyPromise {
   };
 
   /**
-   * 处理 then 回调函数的返回值
+   * 处理 then 回调函数的返回值，根据 x 来判断 promise2 的状态
    * @param {Promise} self 调用 then 函数的那个 promise
    * @param {Promise} promise2 新返回的 promise
    * @param {any} x then 返回值
    */
-  static resolvePromise(self, promise2, x, resolve, reject) {}
+  static resolvePromise(self, promise2, x, resolve, reject) {
+    // 如果返回值是 promise2 抛出类型错误
+    if (x === promise2) {
+      return reject(
+        new TypeError("Chaining cycle detected for promise #<Promise>")
+      );
+    }
+    // 如果 x 是对象或函数
+    if ((typeof x === "object" && x !== null) || typeof x === "function") {
+      let then;
+      // 是否已经调用了 resolvePromise/rejectPromise
+      let called = false;
+
+      try {
+        then = x.then;
+      } catch (e) {
+        // 如果取 x.then 的值时抛出错误 e ，则以 e 为据因拒绝 promise2
+        reject(e);
+      }
+      if (typeof then === "function") {
+        // 执行成功的回调 继续传递 value
+        const resolvePromise = (y) => {
+          // 如果 resolvePromise/rejectPromise 均被调用，或者被同一参数调用了多次，则优先采用首次调用并忽略剩下的调用
+          if (called) return;
+          called = true;
+          // y 可能还是一个 Promise，所以递归调用 resolvePromise
+          // 直到最后返回一个普通值，调用 resolve 方法
+          MyPromise.resolvePromise(self, promise2, y, resolve, reject);
+        };
+
+        // 执行失败的回调 继续传递 reason
+        const rejectPromise = (r) => {
+          if (called) return;
+          called = true;
+          reject(r);
+        };
+        // call 可以避免再次用 x.then 取值
+        then.call(x, resolvePromise, rejectPromise);
+      } else {
+        // 如果 then 不是函数，以 x 为参数执行 promise
+        resolve(x);
+      }
+    } else {
+      // x 是一个普通值，让 promise2 成功即可
+      resolve(x);
+    }
+  }
 }
 
 module.exports = MyPromise;
