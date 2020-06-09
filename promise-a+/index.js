@@ -22,33 +22,19 @@ console.log(1);
 //     }
 //   );
 
-let fs = require("fs");
-
-let p1 = new Promise((resolve, reject) => {
-  console.log(2);
-  setTimeout(() => {
-    reject(4);
-  });
+let p = new Promise((resolve, reject) => {
+  reject("hello");
 });
-p1.then(
-  (data) => {
-    console.log(data);
+p.then(
+  (value) => {
+    console.log(value);
   },
   (reason) => {
-    console.log("reason " + reason);
+    throw reason;
   }
-);
-p1.then(
-  (data) => {
-    console.log(data);
-  },
-  (reason) => {
-    console.log("reason " + reason);
-  }
-);
-p1.then(
-  (data) => {
-    console.log(data);
+).then(
+  (value) => {
+    console.log(value);
   },
   (reason) => {
     console.log("reason " + reason);

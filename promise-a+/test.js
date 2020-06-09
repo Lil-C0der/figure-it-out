@@ -7,7 +7,6 @@ console.log(1);
 // })
 //   .then(
 //     (value) => {
-//       // throw new Error("failed");
 //       return "promise1 value " + value;
 //     },
 //     (reason) => {
@@ -23,42 +22,23 @@ console.log(1);
 //     }
 //   );
 
-let p1 = new MyPromise((resolve, reject) => {
-  console.log(2);
-  setTimeout(() => {
-    reject(4);
-  });
+let p = new Promise((resolve, reject) => {
+  // resolve("hello");
+  reject("hello");
 });
-p1.then(
-  (data) => {
-    console.log(data);
+p.then(
+  (value) => {
+    console.log(value);
+  },
+  (reason) => {
+    throw reason;
+  }
+).then(
+  (value) => {
+    console.log(value);
   },
   (reason) => {
     console.log("reason " + reason);
   }
 );
-p1.then(
-  (data) => {
-    console.log(data);
-  },
-  (reason) => {
-    console.log("reason " + reason);
-  }
-);
-p1.then(
-  (data) => {
-    console.log(data);
-  },
-  (reason) => {
-    console.log("reason " + reason);
-  }
-);
-
-// var p2 = new HisPromise((resolve, reject) => {
-//   console.log(2);
-//   resolve(p2);
-// }).then((data) => {
-//   console.log(data);
-// });
-
 console.log(3);

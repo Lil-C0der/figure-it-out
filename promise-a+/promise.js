@@ -206,6 +206,14 @@ class MyPromise {
       resolve(x);
     }
   }
+
+  static deferred() {
+    const dfd = {};
+    dfd.promise = new Promise((resolve, reject) =>
+      Object.assign(dfd, { resolve, reject })
+    );
+    return dfd;
+  }
 }
 
 module.exports = MyPromise;
