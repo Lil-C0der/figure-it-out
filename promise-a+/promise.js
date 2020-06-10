@@ -269,6 +269,22 @@ class MyPromise {
     });
   }
 
+  static race(values) {
+    // 如果传的迭代是空的，则返回的 promise 将永远等待
+    if (values.length === 0) {
+      return new MyPromise(() => {});
+    }
+
+    return new MyPromise((resolve, reject) => {
+      values.forEach((promise) => {
+        promise.then(
+          (value) => resolve(value),
+          (reason) => reject(reason)
+        );
+      });
+    });
+  }
+
   catch(onRejected) {
     this.then(undefined, onRejected);
   }
