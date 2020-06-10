@@ -1,3 +1,7 @@
+function isThenable(value) {
+  return value && value.then;
+}
+
 class MyPromise {
   // 状态常量
   static states = Object.freeze({
@@ -105,7 +109,6 @@ class MyPromise {
           // 不论 promise1 被 reject 还是被 resolve 时 promise2 都会被 resolve，只有出现异常时才会被 rejected
           try {
             const x = onFulfilled(this.value);
-            // TODO 如果 x 又是一个 Promise 呢?
             MyPromise.resolvePromise(this, promise2, x, resolve, reject);
           } catch (e) {
             // promise2 的拒因
@@ -195,7 +198,7 @@ class MyPromise {
           called = true;
           reject(r);
         };
-        // call 可以避免再次用 x.then 取值
+        // 相当于 x.then(y => {}, r=>{})，call 可以避免再次用 x.then 取值
         then.call(x, resolvePromise, rejectPromise);
       } else {
         // 如果 then 不是函数，以 x 为参数执行 promise
@@ -207,11 +210,87 @@ class MyPromise {
     }
   }
 
+  static resolve(value) {
+    // 如果 value 是 Promise 对象则直接返回
+    if (value instanceof MyPromise) {
+      return value;
+    }
+
+    // 否则返回一个给定值解析过的 Promise 对象，
+    return new MyPromise((resolve, reject) => {
+      // 如果是 thenable 对象就追踪它的状态
+      if (isThenable(value)) {
+        value.then(
+          (value) => resolve(value),
+          (reason) => reject(reason)
+        );
+      } else {
+        resolve(value);
+      }
+    });
+  }
+  static reject(reason) {
+    return new MyPromise((resolve, reject) => {
+      reject(reason);
+    });
+  }
+  //  all 方法
+  static all(values) {
+    // 如果传入一个空数组，返回一个完成状态的 Promise
+    if (values.length === 0) {
+      return new MyPromise((resolve, reject) => {
+        resolve();
+      });
+    }
+
+    return new MyPromise((resolve, reject) => {
+      let resultArr = [];
+      let count = 0;
+      const processValue = (value, index) => {
+        // 用计数器解决异步的问题
+        count++;
+        // 把返回的结果放在数组中
+        resultArr[index] = value;
+        if (count === values.length) {
+          resolve(resultArr);
+        }
+      };
+
+      values.forEach((promise, i) => {
+        if (isThenable(promise)) {
+          promise.then((value) => {
+            processValue(value, i);
+          }, reject);
+        } else {
+          // 参数中的非 Promise 值放进返回的数组中
+          processValue(promise, i);
+        }
+      });
+    });
+  }
+
+  catch(onRejected) {
+    this.then(undefined, onRejected);
+  }
+
+  finally(onFinally) {
+    return this.then(
+      // 等待 onFinally 执行以后 把 value 传递到下一个 then 方法中
+      (value) => MyPromise.resolve(onFinally()).then(() => value),
+
+      (reason) =>
+        MyPromise.resolve(onFinally()).then(() => {
+          throw reason;
+        })
+    );
+  }
+
   static deferred() {
     const dfd = {};
-    dfd.promise = new Promise((resolve, reject) =>
-      Object.assign(dfd, { resolve, reject })
-    );
+    dfd.promise = new Promise((resolve, reject) => {
+      dfd.resolve = resolve;
+      dfd.reject = reject;
+    });
     return dfd;
   }
 }
