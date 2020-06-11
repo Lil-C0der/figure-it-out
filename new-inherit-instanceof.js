@@ -3,8 +3,16 @@ function myNew(constructor, ...args) {
   // TODO 可以加入判断 constructor 类型的工具函数
   // 创建一个原型为 constructor 的 prototype 的空对象 target
   let target = Object.create(constructor.prototype);
-  constructor.call(target, ...args);
-  return target;
+  // 通常构造函数没有返回值，如果有 则返回这个对象或函数
+  let result = constructor.call(target, ...args);
+  if (
+    (typeof result === "object" && result !== null) ||
+    typeof result === "function"
+  ) {
+    return result;
+  } else {
+    return target;
+  }
 }
 
 function Person(name, age) {
