@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>防抖节流</title>
+  </head>
+  <style>
+    .container {
+      display: flex;
+    }
+    .main,
+    .left,
+    .right {
+      height: 300px;
+      flex: 1 1 auto;
+    }
+    .main {
+      width: 100%;
+      background-color: green;
+      flex-basis: auto;
+      order: 2;
+    }
+    .left,
+    .right {
+      width: 200px;
+      background-color: navy;
+      flex-shrink: 0;
+    }
+    .left {
+      order: 1;
+    }
+    .right {
+      order: 3;
+    }
+  </style>
+  <body>
+    <div class="container">
+      <div class="main">main</div>
+      <div class="left">left</div>
+      <div class="right">right</div>
+    </div>
+    <input type="text" name="" value="" />
+  </body>
+  <script type="module">
+    import debounce from "./debounce-throttle.js";
+
+    function foo(e) {
+      console.log(e);
+      console.log(this.value);
+    }
+
+    let el = document.querySelector("input");
+    el.addEventListener("input", debounce(foo, 1000, true));
+    // el.addEventListener("input", foo);
+  </script>
+</html>
