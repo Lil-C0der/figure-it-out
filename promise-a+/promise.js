@@ -62,25 +62,6 @@ class MyPromise {
     this.onFulfilledCallbacks = [];
     // executor 中 reject 时或者抛出错误时执行的回调
     this.onRejectedCallbacks = [];
-
-    this.onFulfilledCallbacks.push((value) => {
-      // 默认的回调也要检查是否循环链，例如：
-      // const p = new Promise((resolve, reject) => {
-      //     setTimeout(() => {
-      //         resolve(p);
-      //     })
-      // })
-      if (value === this) {
-        console.warn("Chaining cycle detected for promise #<Promise>");
-      }
-    });
-
-    this.onRejectedCallbacks.push((reason) => {
-      if (reason === this) {
-        console.warn("Chaining cycle detected for promise #<Promise>");
-        return;
-      }
-    });
   };
 
   /**
@@ -109,6 +90,7 @@ class MyPromise {
           // 不论 promise1 被 reject 还是被 resolve 时 promise2 都会被 resolve，只有出现异常时才会被 rejected
           try {
             const x = onFulfilled(this.value);
+            // onFulfilled 方法的返回值可能是 value 或者一个新的 Promise 对象
             MyPromise.resolvePromise(this, promise2, x, resolve, reject);
           } catch (e) {
             // promise2 的拒因
@@ -169,6 +151,7 @@ class MyPromise {
         new TypeError("Chaining cycle detected for promise #<Promise>")
       );
     }
+
     // 如果 x 是对象或函数
     if ((typeof x === "object" && x !== null) || typeof x === "function") {
       let then;
