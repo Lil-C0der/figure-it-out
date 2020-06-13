@@ -41,17 +41,27 @@
       <div class="right">right</div>
     </div>
     <input type="text" name="" value="" />
+    <button>click</button>
   </body>
   <script type="module">
-    import debounce from "./debounce-throttle.js";
+    import { debounce, throttle } from "./debounce-throttle.js";
 
     function foo(e) {
       console.log(e);
       console.log(this.value);
     }
 
-    let el = document.querySelector("input");
-    el.addEventListener("input", debounce(foo, 1000, true));
-    // el.addEventListener("input", foo);
+    function bar(e) {
+      // console.log(e);
+      console.log("clicked");
+    }
+
+    let inputEl = document.querySelector("input");
+    let btnEl = document.querySelector("button");
+    inputEl.addEventListener("input", debounce(foo, 1000));
+    // inputEl.addEventListener("input", foo);
+    btnEl.addEventListener("click", throttle(bar, 1000));
+    // btnEl.addEventListener("click", debounce(bar, 1000));
+    // btnEl.addEventListener("click", bar);
   </script>
 </html>

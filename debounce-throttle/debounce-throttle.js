@@ -24,4 +24,21 @@ function debounce(fn, delay, immediate) {
   return debounceFn;
 }
 
-export default debounce;
+// 节流
+function throttle(fn, interval) {
+  let cd = false;
+  function throttleFn(...args) {
+    if (!cd) {
+      fn.apply(this, args);
+      // 表示已经函数已经被调用，正在冷却中
+      cd = true;
+      setTimeout(() => {
+        // 冷却结束
+        cd = false;
+      }, interval);
+    }
+  }
+  return throttleFn;
+}
+
+export { debounce, throttle };
