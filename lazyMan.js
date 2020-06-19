@@ -1,4 +1,4 @@
-class _lazyMan {
+class _LazyMan {
   constructor(name) {
     this.name = name;
     this.tasks = [];
@@ -49,11 +49,11 @@ class _lazyMan {
   };
 }
 
-function lazyMan(name) {
-  return new _lazyMan(name);
+function LazyMan(name) {
+  return new _LazyMan(name);
 }
 
-// lazyMan("Hank");
-// lazyMan("jack").rest(3).learn("computer");
-lazyMan("jack").rest(2).learn("chinese").rest(2).learn("computer");
-// lazyMan("jack").restFirst(5).learn("computer");
+// LazyMan("Hank");
+// LazyMan("jack").rest(3).learn("computer");
+LazyMan("jack").rest(2).learn("chinese").rest(2).learn("computer");
+// LazyMan("jack").restFirst(5).learn("computer");
