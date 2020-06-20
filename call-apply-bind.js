@@ -28,9 +28,9 @@ Function.prototype.myCall = function (context, ...args) {
 
 // 实现 apply 方法
 // !!! 注意：这里的 args 就是一个数组
-Function.prototype.myApply = function (context, args) {
+Function.prototype.myApply = function (context, args = []) {
   // 如果传入的上下文对象为 null 或 undefined 则替换为全局对象，直接调用函数即可指向全局对象
-  if (!context) return this(args);
+  if (!context) return this(...args);
   // 给上下文对象 context 添加方法，这里的 this 指向的就是这个方法，因为通过 func.myCall 调用
   context._tempFn = this;
   // 展开参数 args，调用方法

@@ -13,7 +13,22 @@ function fib(n) {
 
 // console.log(fib(50));
 
-// leetcode 1
+// 跳台阶 一次可以跳上 n 阶
+function jumpFloorII(number) {
+  let dp = [];
+  dp[0] = 1;
+  dp[1] = 1;
+  dp[2] = 2;
+
+  if (dp[number]) return dp[number];
+  for (i = 3; i <= number; i++) {
+    dp[i] = 2 * dp[i - 1];
+  }
+  return dp[number];
+}
+console.log("跳台阶：", jumpFloorII(6));
+
+// leetcode 1，两数之和，Map
 function twoSum(nums, target) {
   let map = new Map();
   let rest;
@@ -35,9 +50,7 @@ console.log(twoSum(nums, target));
 function compareVersion(version1, version2) {
   let arr1 = version1.split("."),
     arr2 = version2.split(".");
-  let len1 = arr1.length,
-    len2 = arr2.length;
-  let len = Math.max(len1, len2);
+  let len = Math.max(arr1.length, arr2.length);
   let res1 = 0,
     res2 = 0;
   arr2.length = arr1.length = len;
@@ -66,7 +79,7 @@ let version1 = "1.0",
   version2 = "1.0.0";
 console.log("比较版本号：", compareVersion(version1, version2));
 
-// 小红书 笔记草稿
+// 小红书 笔记草稿，可以用栈解决
 function getScript(str) {
   let leftIndex;
   let rightIndex;
@@ -121,7 +134,7 @@ let input = "have sex 想自杀";
 let list = ["sex", "自杀"];
 console.log("敏感词过滤：", filterStr(input, list));
 
-// 最长公共子串
+// 最长公共子串 二维数组，dp
 function longest(str1, str2) {
   let len1 = str1.length,
     len2 = str2.length;
@@ -158,3 +171,106 @@ let str1 = "acbcbcef";
 // let str2 = "abcbced";
 let str2 = "";
 console.log("最长公共子串：", longest(str1, str2));
+
+// 机器人的运动范围 图、二维数组
+const movingCount = function (m, n, k) {
+  if (k === 0) return 1;
+
+  // 方向数组 分别为上 下 左 右
+  const directionArr = [
+    [-1, 0],
+    [1, 0],
+    [0, -1],
+    [0, 1],
+  ];
+  // set 用于存放已经走过的坐标
+  let set = new Set();
+  set.add("0,0");
+
+  // 将要遍历的坐标队列，从 0, 0 开始
+  let queue = [[0, 0]];
+
+  while (queue.length) {
+    // 将第一个坐标出队
+    let [x, y] = queue.shift();
+
+    // 遍历方向
+    for (let i = 0; i < 4; i++) {
+      let offsetX = x + directionArr[i][0];
+      let offsetY = y + directionArr[i][1];
+
+      // 判断临界值
+      if (
+        offsetX < 0 ||
+        offsetX >= n ||
+        offsetY < 0 ||
+        offsetY >= m ||
+        proceed(offsetX) + proceed(offsetY) > k ||
+        set.has(`${offsetX},${offsetY}`)
+      ) {
+        continue;
+      }
+
+      // 走过的格子就不再纳入统计
+      set.add(`${offsetX},${offsetY}`);
+      // 将该坐标加入队列。因为这个坐标的四周没有走过，需要纳入下次的遍历
+      queue.push([offsetX, offsetY]);
+    }
+  }
+
+  function proceed(num) {
+    let sum = 0;
+    while (num) {
+      sum += num % 10;
+      num = (num / 10) | 0;
+    }
+    return sum;
+  }
+
+  return set.size;
+};
+
+console.log("机器人的运动范围：", movingCount(3, 2, 3));
+
+// 青蛙跳台阶
+const numWays = function (n) {
+  let dp = [];
+  dp[0] = 1;
+  dp[1] = 1;
+  dp[2] = 2;
+
+  if (dp[n] !== undefined) {
+    return dp[n];
+  }
+  for (let i = 3; i <= n; i++) {
+    dp[i] = dp[i - 1] + dp[i - 2];
+  }
+  return dp[n];
+};
+
+// console.log("青蛙跳台阶：", numWays(7));
+
+// 大数相加
+const addStrings = function (a, b) {
+  let arr1 = a.split(""),
+    arr2 = b.split("");
+  let len1 = arr1.length,
+    len2 = arr2.length;
+  if (len1 === 1 || len2 === 1) return a - 0 + (b - 0) + "";
+  let temp = 0;
+  let sum = "";
+  while (arr1.length || arr2.length || temp) {
+    // 两次按位非 将字符串转换成数字
+    temp += ~~arr1.pop() + ~~arr2.pop();
+    sum = (temp % 10) + sum;
+    temp = temp > 9;
+  }
+
+  return sum.replace(/^0/g, "");
+};
+
+//22222222222222222
+// console.log(addStrings("11111111111111112", "1111111111111111"));
+// 602
+// console.log(addStrings("8", "19"));
+console.log("数字字符串相加：", addStrings("999", "999"));
