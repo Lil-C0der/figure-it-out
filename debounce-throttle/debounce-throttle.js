@@ -5,21 +5,23 @@ function debounce(fn, delay, immediate) {
     if (timer) {
       clearTimeout(timer);
     }
-    // 如果没有定时器，则表示函数第一次被调用
-    if (immediate && !timer) {
+
+    if (immediate) {
+      // 如果没有定时器，则表示函数第一次被调用
+      if (!timer) {
+        fn.apply(this, args);
+      }
+      // 把定时器置为 null，方便后面的判断
       timer = setTimeout(() => {
-        // 把定时器置为 null，方便后面的判断
         timer = null;
-        console.log("清空");
+        console.log("timer为null");
       }, delay);
-      fn.apply(this, args);
-      return;
+    } else {
+      // 非立即执行的情况下，设置定时器
+      timer = setTimeout(() => {
+        fn.apply(this, args);
+      }, delay);
     }
-    // 设置定时器
-    timer = setTimeout(() => {
-      fn.apply(this, args);
-      timer = null;
-    }, delay);
   }
   return debounceFn;
 }

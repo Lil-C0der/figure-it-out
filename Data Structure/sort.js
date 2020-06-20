@@ -50,7 +50,6 @@ const bubbleSort = function (arr) {
     for (let j = 0; j < len - i; j++) {
       if (arr[j] > arr[j + 1]) {
         [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-        flag = 1;
       }
     }
   }
