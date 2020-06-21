@@ -254,16 +254,15 @@ const numWays = function (n) {
 const addStrings = function (a, b) {
   let arr1 = a.split(""),
     arr2 = b.split("");
-  let len1 = arr1.length,
-    len2 = arr2.length;
-  if (len1 === 1 || len2 === 1) return a - 0 + (b - 0) + "";
+
+  if (Math.max(arr1.length, arr2.length) === 1) return a - 0 + (b - 0) + "";
   let temp = 0;
   let sum = "";
   while (arr1.length || arr2.length || temp) {
     // 两次按位非 将字符串转换成数字
     temp += ~~arr1.pop() + ~~arr2.pop();
     sum = (temp % 10) + sum;
-    temp = temp > 9;
+    temp = temp > 9 ? 1 : 0;
   }
 
   return sum.replace(/^0/g, "");
@@ -274,3 +273,20 @@ const addStrings = function (a, b) {
 // 602
 // console.log(addStrings("8", "19"));
 console.log("数字字符串相加：", addStrings("999", "999"));
+
+// 回文字符串
+function isPalindrome(s) {
+  let arr = s.replace(/\W/g, "");
+  let p = 0,
+    q = arr.length - 1;
+  let result = true;
+  while (p < q) {
+    if (arr[p].toLowerCase() !== arr[q].toLowerCase()) {
+      return false;
+    }
+    p++;
+    q--;
+  }
+  return result;
+}
+console.log("回文字符串：", isPalindrome("A man, a plan, a canal: Panama"));
