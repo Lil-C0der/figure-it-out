@@ -274,7 +274,7 @@ const addStrings = function (a, b) {
 // console.log(addStrings("8", "19"));
 console.log("数字字符串相加：", addStrings("999", "999"));
 
-// 回文字符串
+// 回文字符串 双指针法
 function isPalindrome(s) {
   let arr = s.replace(/\W/g, "");
   let p = 0,
@@ -289,4 +289,53 @@ function isPalindrome(s) {
   }
   return result;
 }
+
 console.log("回文字符串：", isPalindrome("A man, a plan, a canal: Panama"));
+
+// 回文字符串 翻转数组
+function isPalindrome1(s) {
+  s = s.replace(/\W/g, "").toLowerCase();
+  let newStr = s.split("").reverse().join("");
+
+  return s === newStr;
+}
+console.log("回文字符串：", isPalindrome1("A man, a plan, a canal: Panama"));
+
+// 回文数 翻转数组
+function isPalindromeNum(x) {
+  x += "";
+  return x === x.split("").reverse().join("");
+}
+console.log("回文数：", isPalindrome(121));
+
+// 双指针
+function isPalindromeNum1(x) {
+  x += "";
+  let p = 0,
+    q = x.length - 1;
+  let result = true;
+  while (p < q) {
+    if (x[p] !== x[q]) {
+      return false;
+    }
+    p++;
+    q--;
+  }
+  return result;
+}
+console.log("回文数：", isPalindrome1(121));
+
+// 直接操作数字
+function isPalindromeNum2(x) {
+  if (x < 0 || (x % 10 === 0 && x !== 0)) return false;
+
+  let half = 0;
+  while (x > half) {
+    // 计算末尾的数字
+    half = (x % 10) + half * 10;
+    x = (x / 10) | 0;
+  }
+
+  return x === half || x === ((half / 10) | 0);
+}
+console.log("回文数：", isPalindrome2(121));
