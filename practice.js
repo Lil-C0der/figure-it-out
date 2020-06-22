@@ -339,3 +339,79 @@ function isPalindromeNum2(x) {
   return x === half || x === ((half / 10) | 0);
 }
 console.log("回文数：", isPalindrome2(121));
+
+// 翻转整数
+const reverse = function (x) {
+  let reverseX = 0;
+
+  while (x != 0) {
+    reverseX *= 10;
+    reverseX += x % 10;
+    x = (x / 10) | 0;
+  }
+
+  reverseX = reverseX > 2147483647 || reverseX < -2147483648 ? 0 : reverseX;
+  return reverseX;
+};
+console.log("翻转整数：", reverse(1534236469));
+console.log("翻转整数：", reverse(321));
+console.log("翻转整数：", reverse(-321));
+
+// 只出现一次的数字 排序遍历
+const singleNumber = function (nums) {
+  nums.sort((a, b) => a - b);
+  console.log(nums);
+
+  let len = nums.length;
+  for (let i = 0; i < len; i++) {
+    if (nums[i] !== nums[i + 1] && nums[i] !== nums[i - 1]) {
+      return nums[i];
+    }
+  }
+};
+console.log("只出现一次的数字：", singleNumber([4, 1, 2, 1, 2]));
+
+// 异或
+const singleNumber1 = function (nums) {
+  let temp = nums[0];
+  let len = nums.length;
+  for (let i = 1; i < len; i++) {
+    temp ^= nums[i];
+  }
+  return temp;
+};
+console.log("只出现一次的数字：", singleNumber1([4, 1, 2, 1, 2]));
+
+// 买卖股票 一次 for 循环
+const maxProfit = function (prices) {
+  let profit = 0,
+    min = prices[0];
+
+  for (const p of prices) {
+    min = Math.min(p, min);
+    profit = Math.max(p - min, profit);
+  }
+  return profit;
+};
+
+let prices = [7, 1, 5, 3, 6, 4];
+// let prices = [7, 6, 4, 3, 1];
+// let prices = [2, 4, 1];
+console.log("买卖股票：", maxProfit(prices));
+
+// 打家劫舍
+const rob = function (nums) {
+  let len = nums.length;
+  if (!len) return 0;
+  if (len === 1) return nums[0];
+  let dp = [];
+  dp[0] = nums[0];
+  dp[1] = Math.max(nums[0], nums[1]);
+
+  for (i = 2; i <= len; i++) {
+    dp[i] = Math.max(dp[i - 2] + nums[i], dp[i - 1]);
+  }
+
+  return dp[len - 1];
+};
+console.log("打家劫舍：", rob([2, 7, 9, 3, 1]));
