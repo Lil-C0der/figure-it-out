@@ -81,37 +81,36 @@ console.log("比较版本号：", compareVersion(version1, version2));
 
 // 小红书 笔记草稿，可以用栈解决
 function getScript(str) {
-  let leftIndex;
-  let rightIndex;
-  let strLeft;
-  let strRight;
+  let len = str.length;
+  let res = "";
+  let isIgnore = false;
   let p = 0;
+  let count = 0;
 
-  while (p <= str.length) {
+  while (p < len) {
     if (str[p] === "(") {
-      leftIndex = p;
-      p++;
-    } else if (str[p] === ")") {
-      rightIndex = p;
-      let deletedLen = rightIndex - leftIndex;
-      strLeft = str.slice(0, leftIndex);
-      strRight = str.slice(rightIndex + 1);
-      str = strLeft + strRight;
-      p -= deletedLen;
-    } else if (str[p] === "<") {
-      if (p === 0) {
-        str = str.slice(p + 1);
-      } else if (p > 0) {
-        strLeft = str.slice(0, p - 1);
-        strRight = str.slice(p + 1);
-        str = strLeft + strRight;
-      }
-      p--;
-    } else {
-      p++;
+      isIgnore = true;
+      count++;
     }
+    if (str[p] === ")") {
+      count--;
+      if (count === 0) {
+        isIgnore = false;
+      }
+      p++;
+      continue;
+    }
+    if (str[p] === "<" && !isIgnore) {
+      res = res.slice(0, res.length - 1);
+      p++;
+      continue;
+    }
+    if (!isIgnore) {
+      res += str[p];
+    }
+    p++;
   }
-  return str;
+  return res;
 }
 
 //   let str = "123456789<<<0"; // 1234560
@@ -415,3 +414,68 @@ const rob = function (nums) {
   return dp[len - 1];
 };
 console.log("打家劫舍：", rob([2, 7, 9, 3, 1]));
+
+// 不同路径
+const uniquePaths = function (m, n) {
+  let dp = new Array(n);
+  for (let k = 0; k < n; k++) {
+    dp[k] = new Array(m).fill(0);
+    dp[0] = new Array(m).fill(1);
+    dp[k][0] = 1;
+  }
+
+  for (let i = 1; i < n; i++) {
+    for (let j = 1; j < m; j++) {
+      dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+    }
+  }
+
+  return dp[n - 1][m - 1];
+};
+console.log("不同路径：", uniquePaths(7, 3));
+
+// 不同路径2 障碍物
+const uniquePathsWithObstacles = function (grid) {
+  let row = grid.length;
+  let col = grid[0].length;
+
+  if (grid[0][0] !== 0) {
+    return 0;
+  }
+
+  let dp = new Array(row);
+  for (let k = 0; k < row; k++) {
+    dp[k] = new Array(col).fill(0);
+  }
+
+  dp[0][0] = 1;
+  // 第一列
+  for (let n = 1; n < row; n++) {
+    if (grid[n][0] !== 1) {
+      dp[n][0] = dp[n - 1][0];
+    }
+  }
+  // 第一行
+  for (let m = 1; m < col; m++) {
+    if (grid[0][m] !== 1) {
+      dp[0][m] = dp[0][m - 1];
+    }
+  }
+
+  for (let i = 1; i < row; i++) {
+    for (let j = 1; j < col; j++) {
+      if (grid[i][j] !== 1) {
+        dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+      }
+    }
+  }
+
+  return dp[row - 1][col - 1];
+};
+let grid = [
+  [0, 0, 0],
+  [0, 1, 0],
+  [0, 0, 0],
+];
+
+console.log("不同路径：", uniquePathsWithObstacles(grid));
