@@ -479,3 +479,21 @@ let grid = [
 ];
 
 console.log("不同路径：", uniquePathsWithObstacles(grid));
+
+// leetcode 53 最大子序和
+const maxSubArray = function (nums) {
+  let dp = nums[0],
+    len = nums.length;
+  let result = dp;
+
+  for (let i = 1; i < len; i++) {
+    // dp 表示以 nums[i] 结尾的 最大子序和的大小
+    dp = Math.max(nums[i] + dp, nums[i]);
+    result = Math.max(dp, result);
+  }
+
+  return result;
+};
+
+let nums = [-2, 1, -3, 4, -1, 2, 1, -5, 4];
+console.log("最大子序列和：", maxSubArray(nums));
