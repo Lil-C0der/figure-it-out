@@ -48,26 +48,25 @@ let nums = [3, 2, 4];
 let target = 6;
 console.log(twoSum(nums, target));
 
-// leetcode 比较版本号
+// leetcode 165 比较版本号
 function compareVersion(version1, version2) {
   let arr1 = version1.split("."),
     arr2 = version2.split(".");
-  let len = Math.max(arr1.length, arr2.length);
+  let len1 = arr1.length,
+    len2 = arr2.length;
+  let len = Math.max(len1, len2);
   let res1 = 0,
     res2 = 0;
-  arr2.length = arr1.length = len;
 
   for (let i = 0; i < len; i++) {
     arr1[i] = arr1[i] === undefined ? 0 : arr1[i];
     arr2[i] = arr2[i] === undefined ? 0 : arr2[i];
     arr1[i] -= 0;
     arr2[i] -= 0;
-    let level = len - i - 1;
-    res1 += arr1[i] * Math.pow(10, level);
-    res2 += arr2[i] * Math.pow(10, level);
   }
+  res1 = arr1.join("") - 0;
+  res2 = arr2.join("") - 0;
 
-  console.log(res1, res2);
   if (res1 - res2 > 0) {
     return 1;
   } else if (res1 - res2 < 0) {
@@ -81,7 +80,7 @@ let version1 = "1.0",
   version2 = "1.0.0";
 console.log("比较版本号：", compareVersion(version1, version2));
 
-// 小红书 笔记草稿，可以用栈解决
+// 小红书 笔记草稿
 function getScript(str) {
   let len = str.length;
   let res = "";
@@ -233,24 +232,6 @@ const movingCount = function (m, n, k) {
 
 console.log("机器人的运动范围：", movingCount(3, 2, 3));
 
-// 青蛙跳台阶
-const numWays = function (n) {
-  let dp = [];
-  dp[0] = 1;
-  dp[1] = 1;
-  dp[2] = 2;
-
-  if (dp[n] !== undefined) {
-    return dp[n];
-  }
-  for (let i = 3; i <= n; i++) {
-    dp[i] = dp[i - 1] + dp[i - 2];
-  }
-  return dp[n];
-};
-
-// console.log("青蛙跳台阶：", numWays(7));
-
 // 大数相加
 const addStrings = function (a, b) {
   let arr1 = a.split(""),
@@ -351,7 +332,8 @@ const reverse = function (x) {
     x = (x / 10) | 0;
   }
 
-  reverseX = reverseX > 2147483647 || reverseX < -2147483648 ? 0 : reverseX;
+  // leetcode 溢出判断
+  // reverseX = reverseX > 2147483647 || reverseX < -2147483648 ? 0 : reverseX;
   return reverseX;
 };
 console.log("翻转整数：", reverse(1534236469));
@@ -361,7 +343,6 @@ console.log("翻转整数：", reverse(-321));
 // 只出现一次的数字 排序遍历
 const singleNumber = function (nums) {
   nums.sort((a, b) => a - b);
-  console.log(nums);
 
   let len = nums.length;
   for (let i = 0; i < len; i++) {
@@ -372,7 +353,7 @@ const singleNumber = function (nums) {
 };
 console.log("只出现一次的数字：", singleNumber([4, 1, 2, 1, 2]));
 
-// 异或
+// 只出现一次的数字 异或
 const singleNumber1 = function (nums) {
   let temp = nums[0];
   let len = nums.length;
@@ -389,6 +370,7 @@ const maxProfit = function (prices) {
     min = prices[0];
 
   for (const p of prices) {
+    // 最低价格买入
     min = Math.min(p, min);
     profit = Math.max(p - min, profit);
   }
