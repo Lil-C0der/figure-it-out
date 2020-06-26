@@ -36,8 +36,10 @@ function twoSum(nums, target) {
     // 用 Map 优化
     rest = target - nums[i];
     if (map.has(rest)) {
+      // 返回两个元素的数组下标
       return [map.get(rest), i];
     } else {
+      // 在 Map 中添加元素和对应下标
       map.set(nums[i], i);
     }
   }
@@ -275,12 +277,12 @@ console.log("数字字符串相加：", addStrings("999", "999"));
 
 // 回文字符串 双指针法
 function isPalindrome(s) {
-  let arr = s.replace(/\W/g, "");
+  let str = s.replace(/\W/g, "");
   let p = 0,
-    q = arr.length - 1;
+    q = str.length - 1;
   let result = true;
   while (p < q) {
-    if (arr[p].toLowerCase() !== arr[q].toLowerCase()) {
+    if (str[p].toLowerCase() !== str[q].toLowerCase()) {
       return false;
     }
     p++;

@@ -1,5 +1,5 @@
 // 快速排序 左右指针递归
-const quickSort = function (arr, start, end) {
+const quickSort = function (arr, start = 0, end = arr.length - 1) {
   if (start < end) {
     let pivot = arr[start];
     let p = start,
