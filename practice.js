@@ -481,3 +481,47 @@ const maxSubArray = function (nums) {
 
 let nums = [-2, 1, -3, 4, -1, 2, 1, -5, 4];
 console.log("最大子序列和：", maxSubArray(nums));
+
+// leetcode 93 复原 IP 地址，3 层 for 循环暴力解
+function restoreIP(s) {
+  let len = s.length;
+  let res = new Set();
+  if (len < 4 || len > 12) return;
+
+  // 验证 IP 片段合法性
+  const validate = function (a, b, c, d) {
+    // IP 片段小于 255，且不能以 0 开头
+    const fn = function (x) {
+      return x === "0" || (x.charAt(0) !== "0" && x - 0 <= 255);
+    };
+    return fn(a) && fn(b) && fn(c) && fn(d);
+  };
+
+  // 先给前三个片段划分1位，然后通过最内层的 for 循环来增加第三个片段的长度
+  for (let i = 1; i < 4; i++) {
+    for (let j = i + 1; j < i + 4; j++) {
+      if (j >= len) break;
+      for (let k = j + 1; k < j + 4; k++) {
+        if (k >= len) break;
+
+        let seg1 = s.slice(0, i);
+        let seg2 = s.slice(i, j);
+        let seg3 = s.slice(j, k);
+        let seg4 = s.slice(k);
+        // 最后一个片段长度大于 3 表示不合法
+        if (seg4.length > 3) continue;
+
+        if (validate(seg1, seg2, seg3, seg4)) {
+          let ip = `${seg1}.${seg2}.${seg3}.${seg4}`;
+          res.add(ip);
+        }
+      }
+    }
+  }
+  res = Array.from(res);
+  return res;
+}
+
+console.log("复原 IP 地址：", restoreIP("25525511135"));
+console.log("复原 IP 地址：", restoreIP("0000"));
+console.log("复原 IP 地址：", restoreIP("010010"));
