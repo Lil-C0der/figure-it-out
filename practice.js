@@ -525,3 +525,69 @@ function restoreIP(s) {
 console.log("复原 IP 地址：", restoreIP("25525511135"));
 console.log("复原 IP 地址：", restoreIP("0000"));
 console.log("复原 IP 地址：", restoreIP("010010"));
+
+// leetcode 59 滑动窗口的最大值
+const maxSlidingWindow = function (nums, k) {
+  if (nums.length === 0 || k === 0) {
+    return [];
+  }
+  let maxArr = [];
+  for (let i = 0; i < nums.length - k + 1; i++) {
+    let max = Math.max(...nums.slice(i, i + k));
+    maxArr.push(max);
+  }
+  return maxArr;
+};
+
+const nums = [1, 3, -1, -3, 5, 3, 6, 7],
+  k = 3;
+console.log("滑动窗口的最大值：", maxSlidingWindow(nums, k));
+
+// leetcode 209 长度最小的子数组，O(n^2) 滑动窗口解法
+function minSubArrayLen(s, nums) {
+  let p = 0;
+  let len = nums.length;
+  let minLen = Number.MAX_SAFE_INTEGER;
+  let sum = 0;
+
+  for (let q = 0; q < len; q++) {
+    sum += nums[q];
+    // 大了，左指针 p 右移
+    while (sum >= s) {
+      minLen = Math.min(q - p + 1, minLen);
+      sum -= nums[p];
+      p++;
+    }
+  }
+
+  return minLen === Number.MAX_SAFE_INTEGER ? 0 : minLen;
+}
+
+// leetcode 209 长度最小的子数组，O(n^2) 暴力解法
+const minSubArrayLen = function (s, nums) {
+  let p;
+  let len = nums.length;
+  let minLen = Number.MAX_SAFE_INTEGER;
+
+  for (let i = 0; i < len; i++) {
+    p = i + 1;
+    while (p <= len) {
+      let arr = nums.slice(i, p);
+      let sum = arr.reduce((a, b) => a + b, 0);
+      if (sum >= s) {
+        minLen = Math.min(arr.length, minLen);
+        break;
+      }
+      p++;
+    }
+  }
+
+  return minLen === Number.MAX_SAFE_INTEGER ? 0 : minLen;
+};
+
+// const s = 7,
+// nums = [2, 3, 1, 2, 4, 3];
+const s = 3,
+  nums = [1, 1];
+
+console.log(minSubArrayLen(s, nums));
