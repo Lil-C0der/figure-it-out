@@ -543,7 +543,7 @@ const nums = [1, 3, -1, -3, 5, 3, 6, 7],
   k = 3;
 console.log("滑动窗口的最大值：", maxSlidingWindow(nums, k));
 
-// leetcode 209 长度最小的子数组，O(n^2) 滑动窗口解法
+// leetcode 209 长度最小的子数组，滑动窗口解法
 function minSubArrayLen(s, nums) {
   let p = 0;
   let len = nums.length;
@@ -590,4 +590,30 @@ const minSubArrayLen = function (s, nums) {
 const s = 3,
   nums = [1, 1];
 
-console.log(minSubArrayLen(s, nums));
+console.log("长度最小的子数组：", minSubArrayLen(s, nums));
+
+// leetcode 3. 无重复字符的最长子串
+const lengthOfLongestSubstring = function (s) {
+  let len = s.length;
+  if (len === 1) return 1;
+
+  let max = 0;
+  let str = "";
+  for (let i = 0; i < len; i++) {
+    let ch = s.charAt(i);
+    const index = str.indexOf(ch);
+    if (index >= 0) {
+      str = str.substring(index + 1);
+    }
+    str += ch;
+    max = Math.max(str.length, max);
+  }
+
+  return max;
+};
+
+// let str = "abcabccbb";
+let str = "pwwkew";
+// let str = "au";
+// let str = "   ";
+console.log("无重复字符的最长子串：", lengthOfLongestSubstring(str));
