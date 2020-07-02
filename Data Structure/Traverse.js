@@ -2,25 +2,25 @@
 const preOrder = function (root) {
   if (root !== null) {
     arr.push(root.val);
-    traverse(root.left);
-    traverse(root.right);
+    preOrder(root.left);
+    preOrder(root.right);
   }
 };
 
 // 递归的中序遍历
 const midOrder = function (root) {
   if (root !== null) {
-    traverse(root.left);
+    midOrder(root.left);
     arr.push(root.val);
-    traverse(root.right);
+    midOrder(root.right);
   }
 };
 
 // 递归的后序遍历
 const postOrder = function (root) {
   if (root !== null) {
-    traverse(root.left);
-    traverse(root.right);
+    postOrder(root.left);
+    postOrder(root.right);
     arr.push(root.val);
   }
 };
@@ -60,7 +60,7 @@ const midOrder = function (root) {
   return res;
 };
 
-// 非递归的后序遍历，在先序遍历的基础上把返回数组进行reverse处理
+// 非递归的后序遍历，在先序遍历的基础上把返回数组 reverse
 function postOrder(root) {
   let stack = [];
   let res = [];
