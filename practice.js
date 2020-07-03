@@ -589,7 +589,6 @@ const minSubArrayLen = function (s, nums) {
 // nums = [2, 3, 1, 2, 4, 3];
 const s = 3,
   nums = [1, 1];
-
 console.log("长度最小的子数组：", minSubArrayLen(s, nums));
 
 // leetcode 3. 无重复字符的最长子串
@@ -617,3 +616,97 @@ let str = "pwwkew";
 // let str = "au";
 // let str = "   ";
 console.log("无重复字符的最长子串：", lengthOfLongestSubstring(str));
+
+// leetcode 88 合并两个有序数组，三指针
+// 将 nums2 合并到 nums1 中，使 nums1 成为一个有序数组。
+// nums1 和 nums2 的元素数量分别为 m 和 n，作为参数传入。
+// 可以认为 nums1 有足够的空间（空间大小大于或等于 m + n）来保存 nums2 中的元素。
+const merge = function (nums1, m, nums2, n) {
+  // 合并后数组的最后一位
+  let last = m + n - 1;
+  m--;
+  n--;
+  while (n >= 0) {
+    if (nums1[m] > nums2[n]) {
+      nums1[last] = nums1[m];
+      m--;
+    } else {
+      nums1[last] = nums2[n];
+      n--;
+    }
+    last--;
+  }
+
+  return nums1;
+};
+// 输入:
+let nums1 = [1, 2, 3, 0, 0, 0, 0],
+  m = 3,
+  nums2 = [2, 5, 6],
+  n = 3;
+// 预期：[1,2,2,3,5,6,0]
+console.log("合并两个有序数组：", merge(nums1, m, nums2, n));
+
+// 两个栈实现队列
+var CQueue = function () {
+  this.inStack = [];
+  this.outStack = [];
+};
+
+/**
+ * @param {number} value
+ * @return {void}
+ */
+CQueue.prototype.appendTail = function (value) {
+  return this.inStack.push(value);
+};
+
+/**
+ * @return {number}
+ */
+CQueue.prototype.deleteHead = function () {
+  // 如果第二个栈中有元素，则栈顶元素就是队列中第一个元素
+  if (this.outStack.length !== 0) {
+    return this.outStack.pop();
+  }
+  // 第二个栈为空时，将第一个栈中所有的元素弹出，push 到第二个栈中，再将栈顶元素弹出
+  while (this.inStack.length !== 0) {
+    this.outStack.push(this.inStack.pop());
+  }
+  return this.outStack.pop() || -1;
+};
+
+/**
+ * Your CQueue object will be instantiated and called as such:
+ * var obj = new CQueue()
+ * obj.appendTail(value)
+ * var param_2 = obj.deleteHead()
+ */
+
+// leetcode 322 零钱兑换
+var coinChange = function (coins, amount) {
+  coins = coins.sort((a, b) => a - b);
+  if (amount === 0) return -1;
+  let dp = new Array(amount + 1).fill(Infinity);
+  dp[0] = 0;
+
+  for (let i = 1; i <= amount; i++) {
+    for (coin of coins) {
+      if (coin <= i) {
+        // 状态转移方程，coin 为不同硬币的面额
+        dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+      } else {
+        break;
+      }
+    }
+  }
+  if (dp[amount] === Infinity) {
+    return -1;
+  }
+  return dp[amount];
+};
+let coins = [1, 2, 5],
+  amount = 11;
+// let coins = [1],
+// amount = 0;
+console.log("零钱兑换：", coinChange(coins, amount));
