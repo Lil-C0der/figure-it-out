@@ -710,3 +710,32 @@ let coins = [1, 2, 5],
 // let coins = [1],
 // amount = 0;
 console.log("零钱兑换：", coinChange(coins, amount));
+
+// leetcode 215 topK 基于快排实现
+const findKthLargest = function (nums, k) {
+  const qSort = function (arr, start = 0, end = arr.length - 1) {
+    if (start < end) {
+      let pivot = arr[start];
+      let p = start,
+        q = end;
+      while (p < q) {
+        while (p < q && arr[q] >= pivot) {
+          q--;
+        }
+        while (p < q && arr[p] <= pivot) {
+          p++;
+        }
+        [arr[p], arr[q]] = [arr[q], arr[p]];
+      }
+      [arr[p], arr[start]] = [arr[start], arr[p]];
+
+      // 快排每次分区排序后都能确定一个基准数 pivot 的位置，如果倒数第 k 个数的位置被确认，则直接返回结果
+      if (arr[arr.length - k] === arr[start]) {
+        return arr[arr.length - k];
+      }
+      qSort(arr, start, p - 1);
+      qSort(arr, p + 1, end);
+    }
+  };
+  qSort(nums);
+};
