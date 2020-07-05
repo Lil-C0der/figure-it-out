@@ -8,7 +8,6 @@ function deepClone(source, hash = new WeakMap()) {
   // 遍历对象 拷贝每一个值
   for (let key in source) {
     if (typeof source[key] === "object" && source[key] !== null) {
-      target[key] = Array.isArray(source[key]) ? [] : {};
       // 如果值是对象则递归调用
       target[key] = deepClone(source[key], hash);
     } else {
