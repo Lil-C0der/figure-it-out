@@ -743,3 +743,31 @@ const findKthLargest = function (nums, k) {
   qSort(nums);
   return nums[len - k];
 };
+
+// leetcode 394 字符串解码，栈
+const decodeString = function (s) {
+  let res = "",
+    num = "";
+  let stack = [];
+
+  for (const ch of s) {
+    if (ch >= 0) {
+      num += ch;
+    } else if (ch === "[") {
+      // 用栈保存中括号外的字符串，用 res 变量保存中括号内的字符串
+      stack.push({ num, res });
+      res = "";
+      num = "";
+    } else if (ch === "]") {
+      let obj = stack.pop();
+      res = obj.res + res.repeat(obj.num);
+    } else {
+      res += ch;
+    }
+  }
+
+  return res;
+};
+// let s = "3[a]2[bc]";
+let s = "3[a2[c]]";
+console.log("字符串解码：", decodeString(s));
