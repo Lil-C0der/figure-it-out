@@ -47,7 +47,7 @@
     import { debounce, throttle } from "./debounce-throttle.js";
 
     function foo(e) {
-      console.log(e);
+      // console.log(e);
       console.log(this.value);
     }
 
@@ -58,7 +58,7 @@
 
     let inputEl = document.querySelector("input");
     let btnEl = document.querySelector("button");
-    inputEl.addEventListener("input", debounce(foo, 1000));
+    inputEl.addEventListener("input", debounce(foo, 1000, true));
     // inputEl.addEventListener("input", foo);
     btnEl.addEventListener("click", throttle(bar, 1000));
     // btnEl.addEventListener("click", debounce(bar, 1000));

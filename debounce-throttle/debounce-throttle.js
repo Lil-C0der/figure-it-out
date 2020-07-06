@@ -10,12 +10,18 @@ function debounce(fn, delay, immediate) {
       // 如果没有定时器，则表示函数第一次被调用
       if (!timer) {
         fn.apply(this, args);
+        // 把定时器置为 null，方便后面的判断
+        timer = setTimeout(() => {
+          timer = null;
+          console.log("timer为null");
+        }, delay);
+      } else {
+        timer = setTimeout(() => {
+          fn.apply(this, args);
+          timer = null;
+          console.log("timer为null");
+        }, delay);
       }
-      // 把定时器置为 null，方便后面的判断
-      timer = setTimeout(() => {
-        timer = null;
-        console.log("timer为null");
-      }, delay);
     } else {
       // 非立即执行的情况下，设置定时器
       timer = setTimeout(() => {
