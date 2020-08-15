@@ -49,4 +49,38 @@ function throttle(fn, interval) {
   return throttleFn;
 }
 
-export { debounce, throttle };
+// 防抖函数，在一次事件循环中只执行一次
+// function F() {
+//   console.log(1);
+// }
+// const G = debounce(F);
+// function A() {
+//   G();
+//   G();
+//   G();
+// }
+// 打一次
+// A();
+// 打两次
+// setTimeout(G, 0);
+// G();
+
+function newDebounce(fn, delay = 0) {
+  let timer = null;
+  const debounceFn = function () {
+    if (timer) {
+      clearTimeout(timer);
+    }
+    new Promise((resolve, reject) => {
+      resolve();
+      timer = setTimeout(() => {
+        fn.apply(this);
+      }, delay);
+    }).then(() => {
+      timer = null;
+    });
+  };
+  return debounceFn;
+}
+
+export { debounce, throttle, newDebounce };
