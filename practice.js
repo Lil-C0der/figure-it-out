@@ -771,3 +771,135 @@ const decodeString = function (s) {
 // let s = "3[a]2[bc]";
 let s = "3[a2[c]]";
 console.log("字符串解码：", decodeString(s));
+
+// leetcode 54 螺旋输出矩阵 CVTE 二面
+const spiralOrder = function (matrix) {
+  let row = matrix.length;
+  let col = matrix[0].length;
+
+  let top = 0;
+  let bottom = row - 1;
+  let left = 0;
+  let right = col - 1;
+
+  let result = [];
+
+  while (result.length < col * row) {
+    for (let i = left; i <= right; i++) {
+      result.push(matrix[top][i]);
+    }
+    top++;
+    for (let i = top; i <= bottom; i++) {
+      result.push(matrix[i][right]);
+    }
+    right--;
+    if (result.length === col * row) {
+      break;
+    }
+    for (let i = right; i >= left; i--) {
+      result.push(matrix[bottom][i]);
+    }
+    bottom--;
+    for (let i = bottom; i >= top; i--) {
+      result.push(matrix[i][left]);
+    }
+    left++;
+    // console.log(`top ${top} right ${right} left ${left} bottom ${bottom}`);
+  }
+
+  return result;
+};
+const matrix = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9],
+];
+[1, 2, 3, 6, 9, 8, 7, 4, 5];
+
+// const matrix = [
+//   [1, 2, 3, 4],
+//   [5, 6, 7, 8],
+//   [9, 10, 11, 12],
+// ];
+// [1,2,3,4,8,12,11,10,9,5,6,7]
+
+spiralOrder("螺旋打印矩阵", matrix);
+
+// 顺时针旋转矩阵 非原地
+const rotateMatrix = function (matrix) {
+  let row = matrix.length;
+  let col = matrix[0].length;
+
+  let res = [];
+
+  for (let i = 0; i < col; i++) {
+    res[i] = [];
+    for (let j = row - 1; j >= 0; j--) {
+      let num = matrix[j][i];
+      console.log(num, `${i}, ${2 - j}`);
+      res[i][2 - j] = num;
+    }
+  }
+};
+
+const matrix = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9],
+];
+console.log("非原地", rotateMatrix(matrix));
+
+// 原地旋转矩阵
+const rotateMatrix2 = (matrix) => {
+  let row = matrix.length;
+  let col = matrix[0].length;
+
+  for (let i = 0; i < row; i++) {
+    for (let j = 0; j < col; j++) {
+      matrix[i].push(matrix[col - j - 1][i]);
+    }
+  }
+
+  matrix.forEach((row, index) => {
+    matrix[index] = matrix[index].slice(col);
+  });
+};
+rotateMatrix2(matrix);
+console.log("原地", matrix);
+
+// 返回所有和为定值的整数对 腾讯一面
+const getPairs = (nums, target) => {
+  let obj = {};
+  for (const num of nums) {
+    const rest = target - num;
+    // key 为数组中的数字，value 为数字出现的次数
+    obj[num] = obj.hasOwnProperty(num) ? obj[num] + 1 : 1;
+
+    if (num !== rest) {
+      // 两数不同时，两数出现的次数都大于等于 1
+      if (obj[rest] && obj[num]) {
+        result.push([num, rest]);
+        obj[rest]--;
+        obj[num]--;
+      }
+    } else {
+      // 两数相同时，这个数字出现的次数大于等于 2
+      if (obj[num] >= 2) {
+        result.push([num, rest]);
+        obj[rest]--;
+        obj[num]--;
+      }
+    }
+  }
+
+  return result;
+};
+
+console.log("整数对为：", getPairs([1, 1, 1], 2));
+// [1, 1]
+console.log("整数对为：", getPairs([1, 2, 3], 4));
+// [1, 3]
+console.log("整数对为：", getPairs([5, 6, 5, 6], 11));
+// [[5, 6],[5, 6]]
+console.log("整数对为：", getPairs([1, 2, 3, 2, 2], 4));
+// [[1, 3],[2, 2]]
