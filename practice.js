@@ -903,3 +903,17 @@ console.log("整数对为：", getPairs([5, 6, 5, 6], 11));
 // [[5, 6],[5, 6]]
 console.log("整数对为：", getPairs([1, 2, 3, 2, 2], 4));
 // [[1, 3],[2, 2]]
+
+function underlineToCamel(str) {
+  let arr = str.split("_");
+  let res = "";
+  arr.forEach((element, index) => {
+    let word = element;
+    if (index > 0) {
+      word = element[0].toUpperCase() + element.slice(1);
+    }
+    res += word;
+  });
+  console.log(res);
+}
+underlineToCamel("get_element_by_id");
