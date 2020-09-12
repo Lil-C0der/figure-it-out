@@ -26,7 +26,7 @@ function jumpFloorII(number) {
   }
   return dp[number];
 }
-console.log("跳台阶：", jumpFloorII(6));
+console.log('跳台阶：', jumpFloorII(6));
 
 // leetcode 1，两数之和，Map
 function twoSum(nums, target) {
@@ -50,8 +50,8 @@ console.log(twoSum(nums, target));
 
 // leetcode 165 比较版本号
 function compareVersion(version1, version2) {
-  let arr1 = version1.split("."),
-    arr2 = version2.split(".");
+  let arr1 = version1.split('.'),
+    arr2 = version2.split('.');
   let len1 = arr1.length,
     len2 = arr2.length;
   let len = Math.max(len1, len2);
@@ -64,8 +64,8 @@ function compareVersion(version1, version2) {
     arr1[i] -= 0;
     arr2[i] -= 0;
   }
-  res1 = arr1.join("") - 0;
-  res2 = arr2.join("") - 0;
+  res1 = arr1.join('') - 0;
+  res2 = arr2.join('') - 0;
 
   if (res1 - res2 > 0) {
     return 1;
@@ -76,24 +76,24 @@ function compareVersion(version1, version2) {
   }
 }
 
-let version1 = "1.0",
-  version2 = "1.0.0";
-console.log("比较版本号：", compareVersion(version1, version2));
+let version1 = '1.0',
+  version2 = '1.0.0';
+console.log('比较版本号：', compareVersion(version1, version2));
 
 // 小红书 笔记草稿
 function getScript(str) {
   let len = str.length;
-  let res = "";
+  let res = '';
   let isIgnore = false;
   let p = 0;
   let count = 0;
 
   while (p < len) {
-    if (str[p] === "(") {
+    if (str[p] === '(') {
       isIgnore = true;
       count++;
     }
-    if (str[p] === ")") {
+    if (str[p] === ')') {
       count--;
       if (count === 0) {
         isIgnore = false;
@@ -101,7 +101,7 @@ function getScript(str) {
       p++;
       continue;
     }
-    if (str[p] === "<" && !isIgnore) {
+    if (str[p] === '<' && !isIgnore) {
       res = res.slice(0, res.length - 1);
       p++;
       continue;
@@ -116,8 +116,8 @@ function getScript(str) {
 
 //   let str = "123456789<<<0"; // 1234560
 // let str = "Corona(Trump)USA<<";
-let str = "<<<123";
-console.log("笔记草稿：", getScript(str));
+let str = '<<<123';
+console.log('笔记草稿：', getScript(str));
 
 //   let str = "Corona(Trump)USA(script)<<<<<";
 //   let str = "(12345678909987654321234567890987654321)";
@@ -125,20 +125,20 @@ console.log("笔记草稿：", getScript(str));
 // 敏感词过滤
 function filterStr(str, list) {
   for (const e of list) {
-    str = str.replace(e, "*".repeat(e.length));
+    str = str.replace(e, '*'.repeat(e.length));
   }
   return str;
 }
 
-let input = "have sex 想自杀";
-let list = ["sex", "自杀"];
-console.log("敏感词过滤：", filterStr(input, list));
+let input = 'have sex 想自杀';
+let list = ['sex', '自杀'];
+console.log('敏感词过滤：', filterStr(input, list));
 
 // 最长公共子串 二维数组，dp
 function longest(str1, str2) {
   let len1 = str1.length,
     len2 = str2.length;
-  if (!len1 || !len2) return ["", 0];
+  if (!len1 || !len2) return ['', 0];
   let maxLen = 0;
   let index;
 
@@ -167,10 +167,10 @@ function longest(str1, str2) {
   return [str1.substring(index - maxLen + 1, index + 1), maxLen];
 }
 // let str1 = "acbcbcef";
-let str1 = "acbcbcef";
+let str1 = 'acbcbcef';
 // let str2 = "abcbced";
-let str2 = "";
-console.log("最长公共子串：", longest(str1, str2));
+let str2 = '';
+console.log('最长公共子串：', longest(str1, str2));
 
 // 机器人的运动范围 图、二维数组
 const movingCount = function (m, n, k) {
@@ -181,11 +181,11 @@ const movingCount = function (m, n, k) {
     [-1, 0],
     [1, 0],
     [0, -1],
-    [0, 1],
+    [0, 1]
   ];
   // set 用于存放已经走过的坐标
   let set = new Set();
-  set.add("0,0");
+  set.add('0,0');
 
   // 将要遍历的坐标队列，从 0, 0 开始
   let queue = [[0, 0]];
@@ -230,16 +230,16 @@ const movingCount = function (m, n, k) {
   return set.size;
 };
 
-console.log("机器人的运动范围：", movingCount(3, 2, 3));
+console.log('机器人的运动范围：', movingCount(3, 2, 3));
 
 // 大数相加
 const addStrings = function (a, b) {
-  let arr1 = a.split(""),
-    arr2 = b.split("");
+  let arr1 = a.split(''),
+    arr2 = b.split('');
 
-  if (Math.max(arr1.length, arr2.length) === 1) return a - 0 + (b - 0) + "";
+  if (Math.max(arr1.length, arr2.length) === 1) return a - 0 + (b - 0) + '';
   let temp = 0;
-  let sum = "";
+  let sum = '';
   while (arr1.length || arr2.length || temp) {
     // 两次按位非 将字符串转换成数字
     temp += ~~arr1.pop() + ~~arr2.pop();
@@ -247,18 +247,18 @@ const addStrings = function (a, b) {
     temp = temp > 9 ? 1 : 0;
   }
 
-  return sum.replace(/^0/g, "");
+  return sum.replace(/^0/g, '');
 };
 
 //22222222222222222
 // console.log(addStrings("11111111111111112", "1111111111111111"));
 // 602
 // console.log(addStrings("8", "19"));
-console.log("数字字符串相加：", addStrings("999", "999"));
+console.log('数字字符串相加：', addStrings('999', '999'));
 
 // 回文字符串 双指针法
 function isPalindrome(s) {
-  let str = s.replace(/\W/g, "");
+  let str = s.replace(/\W/g, '');
   let p = 0,
     q = str.length - 1;
   let result = true;
@@ -272,27 +272,27 @@ function isPalindrome(s) {
   return result;
 }
 
-console.log("回文字符串：", isPalindrome("A man, a plan, a canal: Panama"));
+console.log('回文字符串：', isPalindrome('A man, a plan, a canal: Panama'));
 
 // 回文字符串 翻转数组
 function isPalindrome1(s) {
-  s = s.replace(/\W/g, "").toLowerCase();
-  let newStr = s.split("").reverse().join("");
+  s = s.replace(/\W/g, '').toLowerCase();
+  let newStr = s.split('').reverse().join('');
 
   return s === newStr;
 }
-console.log("回文字符串：", isPalindrome1("A man, a plan, a canal: Panama"));
+console.log('回文字符串：', isPalindrome1('A man, a plan, a canal: Panama'));
 
 // 回文数 翻转数组
 function isPalindromeNum(x) {
-  x += "";
-  return x === x.split("").reverse().join("");
+  x += '';
+  return x === x.split('').reverse().join('');
 }
-console.log("回文数：", isPalindrome(121));
+console.log('回文数：', isPalindrome(121));
 
 // 双指针
 function isPalindromeNum1(x) {
-  x += "";
+  x += '';
   let p = 0,
     q = x.length - 1;
   let result = true;
@@ -305,7 +305,7 @@ function isPalindromeNum1(x) {
   }
   return result;
 }
-console.log("回文数：", isPalindrome1(121));
+console.log('回文数：', isPalindrome1(121));
 
 // 直接操作数字
 function isPalindromeNum2(x) {
@@ -320,7 +320,7 @@ function isPalindromeNum2(x) {
 
   return x === half || x === ((half / 10) | 0);
 }
-console.log("回文数：", isPalindrome2(121));
+console.log('回文数：', isPalindrome2(121));
 
 // 翻转整数
 const reverse = function (x) {
@@ -336,9 +336,9 @@ const reverse = function (x) {
   // reverseX = reverseX > 2147483647 || reverseX < -2147483648 ? 0 : reverseX;
   return reverseX;
 };
-console.log("翻转整数：", reverse(1534236469));
-console.log("翻转整数：", reverse(321));
-console.log("翻转整数：", reverse(-321));
+console.log('翻转整数：', reverse(1534236469));
+console.log('翻转整数：', reverse(321));
+console.log('翻转整数：', reverse(-321));
 
 // 只出现一次的数字 排序遍历
 const singleNumber = function (nums) {
@@ -351,7 +351,7 @@ const singleNumber = function (nums) {
     }
   }
 };
-console.log("只出现一次的数字：", singleNumber([4, 1, 2, 1, 2]));
+console.log('只出现一次的数字：', singleNumber([4, 1, 2, 1, 2]));
 
 // 只出现一次的数字 异或
 const singleNumber1 = function (nums) {
@@ -362,7 +362,7 @@ const singleNumber1 = function (nums) {
   }
   return temp;
 };
-console.log("只出现一次的数字：", singleNumber1([4, 1, 2, 1, 2]));
+console.log('只出现一次的数字：', singleNumber1([4, 1, 2, 1, 2]));
 
 // 买卖股票 一次 for 循环
 const maxProfit = function (prices) {
@@ -380,7 +380,7 @@ const maxProfit = function (prices) {
 let prices = [7, 1, 5, 3, 6, 4];
 // let prices = [7, 6, 4, 3, 1];
 // let prices = [2, 4, 1];
-console.log("买卖股票：", maxProfit(prices));
+console.log('买卖股票：', maxProfit(prices));
 
 // 打家劫舍
 const rob = function (nums) {
@@ -397,7 +397,7 @@ const rob = function (nums) {
 
   return dp[len - 1];
 };
-console.log("打家劫舍：", rob([2, 7, 9, 3, 1]));
+console.log('打家劫舍：', rob([2, 7, 9, 3, 1]));
 
 // 不同路径
 const uniquePaths = function (m, n) {
@@ -416,7 +416,7 @@ const uniquePaths = function (m, n) {
 
   return dp[n - 1][m - 1];
 };
-console.log("不同路径：", uniquePaths(7, 3));
+console.log('不同路径：', uniquePaths(7, 3));
 
 // 不同路径2 障碍物
 const uniquePathsWithObstacles = function (grid) {
@@ -459,10 +459,10 @@ const uniquePathsWithObstacles = function (grid) {
 let grid = [
   [0, 0, 0],
   [0, 1, 0],
-  [0, 0, 0],
+  [0, 0, 0]
 ];
 
-console.log("不同路径：", uniquePathsWithObstacles(grid));
+console.log('不同路径：', uniquePathsWithObstacles(grid));
 
 // leetcode 53 最大子序和
 const maxSubArray = function (nums) {
@@ -480,7 +480,7 @@ const maxSubArray = function (nums) {
 };
 
 let nums = [-2, 1, -3, 4, -1, 2, 1, -5, 4];
-console.log("最大子序列和：", maxSubArray(nums));
+console.log('最大子序列和：', maxSubArray(nums));
 
 // leetcode 93 复原 IP 地址，3 层 for 循环暴力解
 function restoreIP(s) {
@@ -492,7 +492,7 @@ function restoreIP(s) {
   const validate = function (a, b, c, d) {
     // IP 片段小于 255，且不能以 0 开头
     const fn = function (x) {
-      return x === "0" || (x.charAt(0) !== "0" && x - 0 <= 255);
+      return x === '0' || (x.charAt(0) !== '0' && x - 0 <= 255);
     };
     return fn(a) && fn(b) && fn(c) && fn(d);
   };
@@ -522,9 +522,9 @@ function restoreIP(s) {
   return res;
 }
 
-console.log("复原 IP 地址：", restoreIP("25525511135"));
-console.log("复原 IP 地址：", restoreIP("0000"));
-console.log("复原 IP 地址：", restoreIP("010010"));
+console.log('复原 IP 地址：', restoreIP('25525511135'));
+console.log('复原 IP 地址：', restoreIP('0000'));
+console.log('复原 IP 地址：', restoreIP('010010'));
 
 // leetcode 59 滑动窗口的最大值
 const maxSlidingWindow = function (nums, k) {
@@ -541,7 +541,7 @@ const maxSlidingWindow = function (nums, k) {
 
 const nums = [1, 3, -1, -3, 5, 3, 6, 7],
   k = 3;
-console.log("滑动窗口的最大值：", maxSlidingWindow(nums, k));
+console.log('滑动窗口的最大值：', maxSlidingWindow(nums, k));
 
 // leetcode 209 长度最小的子数组，滑动窗口解法
 function minSubArrayLen(s, nums) {
@@ -589,7 +589,7 @@ const minSubArrayLen = function (s, nums) {
 // nums = [2, 3, 1, 2, 4, 3];
 const s = 3,
   nums = [1, 1];
-console.log("长度最小的子数组：", minSubArrayLen(s, nums));
+console.log('长度最小的子数组：', minSubArrayLen(s, nums));
 
 // leetcode 3. 无重复字符的最长子串
 const lengthOfLongestSubstring = function (s) {
@@ -597,7 +597,7 @@ const lengthOfLongestSubstring = function (s) {
   if (len === 1) return 1;
 
   let max = 0;
-  let str = "";
+  let str = '';
   for (let i = 0; i < len; i++) {
     let ch = s.charAt(i);
     const index = str.indexOf(ch);
@@ -612,10 +612,10 @@ const lengthOfLongestSubstring = function (s) {
 };
 
 // let str = "abcabccbb";
-let str = "pwwkew";
+let str = 'pwwkew';
 // let str = "au";
 // let str = "   ";
-console.log("无重复字符的最长子串：", lengthOfLongestSubstring(str));
+console.log('无重复字符的最长子串：', lengthOfLongestSubstring(str));
 
 // leetcode 88 合并两个有序数组，三指针
 // 将 nums2 合并到 nums1 中，使 nums1 成为一个有序数组。
@@ -645,7 +645,7 @@ let nums1 = [1, 2, 3, 0, 0, 0, 0],
   nums2 = [2, 5, 6],
   n = 3;
 // 预期：[1,2,2,3,5,6,0]
-console.log("合并两个有序数组：", merge(nums1, m, nums2, n));
+console.log('合并两个有序数组：', merge(nums1, m, nums2, n));
 
 // 两个栈实现队列
 var CQueue = function () {
@@ -709,7 +709,7 @@ let coins = [1, 2, 5],
   amount = 11;
 // let coins = [1],
 // amount = 0;
-console.log("零钱兑换：", coinChange(coins, amount));
+console.log('零钱兑换：', coinChange(coins, amount));
 
 // leetcode 215 topK 基于快排实现
 const findKthLargest = function (nums, k) {
@@ -746,19 +746,19 @@ const findKthLargest = function (nums, k) {
 
 // leetcode 394 字符串解码，栈
 const decodeString = function (s) {
-  let res = "",
-    num = "";
+  let res = '',
+    num = '';
   let stack = [];
 
   for (const ch of s) {
     if (ch >= 0) {
       num += ch;
-    } else if (ch === "[") {
+    } else if (ch === '[') {
       // 用栈保存中括号外的字符串，用 res 变量保存中括号内的字符串
       stack.push({ num, res });
-      res = "";
-      num = "";
-    } else if (ch === "]") {
+      res = '';
+      num = '';
+    } else if (ch === ']') {
       let obj = stack.pop();
       res = obj.res + res.repeat(obj.num);
     } else {
@@ -769,8 +769,8 @@ const decodeString = function (s) {
   return res;
 };
 // let s = "3[a]2[bc]";
-let s = "3[a2[c]]";
-console.log("字符串解码：", decodeString(s));
+let s = '3[a2[c]]';
+console.log('字符串解码：', decodeString(s));
 
 // leetcode 54 螺旋输出矩阵 CVTE 二面
 const spiralOrder = function (matrix) {
@@ -812,7 +812,7 @@ const spiralOrder = function (matrix) {
 const matrix = [
   [1, 2, 3],
   [4, 5, 6],
-  [7, 8, 9],
+  [7, 8, 9]
 ];
 [1, 2, 3, 6, 9, 8, 7, 4, 5];
 
@@ -823,7 +823,7 @@ const matrix = [
 // ];
 // [1,2,3,4,8,12,11,10,9,5,6,7]
 
-spiralOrder("螺旋打印矩阵", matrix);
+spiralOrder('螺旋打印矩阵', matrix);
 
 // 顺时针旋转矩阵 非原地
 const rotateMatrix = function (matrix) {
@@ -845,9 +845,9 @@ const rotateMatrix = function (matrix) {
 const matrix = [
   [1, 2, 3],
   [4, 5, 6],
-  [7, 8, 9],
+  [7, 8, 9]
 ];
-console.log("非原地", rotateMatrix(matrix));
+console.log('非原地', rotateMatrix(matrix));
 
 // 原地旋转矩阵
 const rotateMatrix2 = (matrix) => {
@@ -865,7 +865,7 @@ const rotateMatrix2 = (matrix) => {
   });
 };
 rotateMatrix2(matrix);
-console.log("原地", matrix);
+console.log('原地', matrix);
 
 // 返回所有和为定值的整数对 腾讯一面
 const getPairs = (nums, target) => {
@@ -895,18 +895,19 @@ const getPairs = (nums, target) => {
   return result;
 };
 
-console.log("整数对为：", getPairs([1, 1, 1], 2));
+console.log('整数对为：', getPairs([1, 1, 1], 2));
 // [1, 1]
-console.log("整数对为：", getPairs([1, 2, 3], 4));
+console.log('整数对为：', getPairs([1, 2, 3], 4));
 // [1, 3]
-console.log("整数对为：", getPairs([5, 6, 5, 6], 11));
+console.log('整数对为：', getPairs([5, 6, 5, 6], 11));
 // [[5, 6],[5, 6]]
-console.log("整数对为：", getPairs([1, 2, 3, 2, 2], 4));
+console.log('整数对为：', getPairs([1, 2, 3, 2, 2], 4));
 // [[1, 3],[2, 2]]
 
+// 下划线转驼峰命名
 function underlineToCamel(str) {
-  let arr = str.split("_");
-  let res = "";
+  let arr = str.split('_');
+  let res = '';
   arr.forEach((element, index) => {
     let word = element;
     if (index > 0) {
@@ -916,4 +917,33 @@ function underlineToCamel(str) {
   });
   console.log(res);
 }
-underlineToCamel("get_element_by_id");
+underlineToCamel('下划线转驼峰命名', 'get_element_by_id');
+
+// 上次随机 hex 值
+function randomHex() {
+  let res = '';
+  for (let i = 0; i < 3; i++) {
+    let randomNum = Math.floor(Math.random() * 256);
+    randomNum = randomNum.toString(16);
+    res += randomNum;
+  }
+  return `#${res}`;
+}
+console.log('返回一个随机的颜色', randomHex());
+
+// hex 转 rgb
+function hexToRgb(hex) {
+  hex = hex.slice(1);
+  let res = '(';
+  for (let i = 0; i < 6; i += 2) {
+    let num = `0x${hex.slice(i, i + 2)}`.toString(1);
+    console.log(+num);
+    res += `${+num}`;
+    if (i !== 4) {
+      res += ',';
+    }
+  }
+
+  return `${res})`;
+}
+console.log('#002FA7 => (0,47,167)', hexToRgb('#002FA7'));
