@@ -142,21 +142,21 @@ function longest(str1, str2) {
   let maxLen = 0;
   let index;
 
-  let arr = new Array(len2);
+  let arr = new Array(len1);
   for (let k = 0; k < len1; k++) {
-    arr[k] = new Array(len1).fill(0);
+    arr[k] = new Array(len2).fill(0);
   }
 
   for (let m = 0; m < len1; m++) {
     for (let n = 0; n < len2; n++) {
       if (str1[m] === str2[n]) {
         if (m === 0 || n === 0) {
-          arr[n][m] = 1;
-          maxLen = 1;
+          arr[m][n] = 1;
+          maxLen = Math.max(maxLen, 1);
         } else {
-          arr[n][m] = arr[n - 1][m - 1] + 1;
-          if (arr[n][m] > maxLen) {
-            maxLen = arr[n][m];
+          arr[m][n] = arr[m - 1][n - 1] + 1;
+          if (arr[m][n] > maxLen) {
+            maxLen = arr[m][n];
             index = m;
           }
         }
@@ -164,7 +164,9 @@ function longest(str1, str2) {
     }
   }
 
-  return [str1.substring(index - maxLen + 1, index + 1), maxLen];
+  const res = str1.slice(index - maxLen + 1, index + 1);
+
+  return [res, res.length];
 }
 // let str1 = "acbcbcef";
 let str1 = 'acbcbcef';
