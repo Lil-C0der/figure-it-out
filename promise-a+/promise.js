@@ -5,9 +5,9 @@ function isThenable(value) {
 class MyPromise {
   // 状态常量
   static states = Object.freeze({
-    PENDING: "pending",
-    FULFILLED: "fulfilled",
-    REJECTED: "rejected",
+    PENDING: 'pending',
+    FULFILLED: 'fulfilled',
+    REJECTED: 'rejected'
   });
 
   /**
@@ -16,7 +16,7 @@ class MyPromise {
    */
   constructor(executor) {
     // executor 必须为一个函数
-    if (typeof executor !== "function") {
+    if (typeof executor !== 'function') {
       throw new TypeError(`Promise resolver ${executor} is not a function`);
     }
     this.initPromise();
@@ -71,10 +71,10 @@ class MyPromise {
    */
   then = (onFulfilled, onRejected) => {
     // onFulfilled/onRejected 不为函数时，继续传递 value/reason 确保下一个 then 能拿到参数
-    if (typeof onFulfilled !== "function") {
+    if (typeof onFulfilled !== 'function') {
       onFulfilled = (value) => value;
     }
-    if (typeof onRejected !== "function") {
+    if (typeof onRejected !== 'function') {
       onRejected = (reason) => {
         throw reason;
       };
@@ -148,12 +148,12 @@ class MyPromise {
     // 如果返回值是 promise2 抛出类型错误
     if (x === promise2) {
       return reject(
-        new TypeError("Chaining cycle detected for promise #<Promise>")
+        new TypeError('Chaining cycle detected for promise #<Promise>')
       );
     }
 
     // 如果 x 是对象或函数
-    if ((typeof x === "object" && x !== null) || typeof x === "function") {
+    if ((typeof x === 'object' && x !== null) || typeof x === 'function') {
       let then;
       // 是否已经调用了 resolvePromise/rejectPromise
       let called = false;
@@ -164,7 +164,7 @@ class MyPromise {
         // 如果取 x.then 的值时抛出错误 e ，则以 e 为据因拒绝 promise2
         reject(e);
       }
-      if (typeof then === "function") {
+      if (typeof then === 'function') {
         // 执行成功的回调 继续传递 value
         const resolvePromise = (y) => {
           // 如果 resolvePromise/rejectPromise 均被调用，或者被同一参数调用了多次，则优先采用首次调用并忽略剩下的调用
@@ -282,6 +282,31 @@ class MyPromise {
           throw reason;
         })
     );
+  }
+
+  // any 方法，和 all 相反
+  static any(pArr) {
+    let resArr = [];
+    let count = 0;
+    let len = pArr.length;
+    return new Promise((resolve, reject) => {
+      function processValue(reason, index) {
+        count++;
+        resArr[index] = reason;
+        if (count === len) {
+          // 将一个 AggregateError 实例作为 reject 方法的参数，即拒因
+          const e = new AggregateError(resArr, 'All promises were rejected');
+
+          reject(e);
+        }
+      }
+      pArr.forEach((p, i) => {
+        // 如果是成功的 promise 则直接调用 resolve 方法，返回那个已经成功的 promise
+        p.then(resolve, (reason) => {
+          processValue(reason, i);
+        });
+      });
+    });
   }
 
   static deferred() {
