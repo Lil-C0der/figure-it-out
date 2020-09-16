@@ -921,6 +921,17 @@ function underlineToCamel(str) {
 }
 underlineToCamel('下划线转驼峰命名', 'get_element_by_id');
 
+// 驼峰转下划线
+function camelToUnderline(str) {
+  function replacer(match) {
+    return `_${match.toLowerCase()}`;
+  }
+  // 传入一个函数作为 replace 的第二个参数
+  return str.replace(/[A-Z]/g, replacer);
+}
+
+camelToUnderline('驼峰转下划线', 'getElementById');
+
 // 上次随机 hex 值
 function randomHex() {
   let res = '';
