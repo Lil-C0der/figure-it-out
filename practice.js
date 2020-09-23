@@ -774,6 +774,40 @@ const decodeString = function (s) {
 let s = '3[a2[c]]';
 console.log('字符串解码：', decodeString(s));
 
+// 和为定值的所有整数对
+function getPairs(arr, sum) {
+  let obj = {};
+  let res = [];
+
+  for (const num of arr) {
+    if (!obj.hasOwnProperty(num)) {
+      obj[num] = 1;
+    } else {
+      obj[num]++;
+    }
+
+    const remain = sum - num;
+    if (obj[remain] > 0) {
+      if (remain !== num) {
+        if (obj[num] > 0) {
+          res.push([num, remain]);
+          obj[num]--;
+          obj[remain]--;
+        }
+      } else {
+        if (obj[remain] >= 2) {
+          res.push([num, remain]);
+          obj[num]--;
+          obj[remain]--;
+        }
+      }
+    }
+  }
+
+  return res;
+}
+console.log('和为定值的整数对', getPairs([1, 3, 2, 3, 4, 3, 5, 3, 6], 6));
+
 // leetcode 54 螺旋输出矩阵 CVTE 二面
 const spiralOrder = function (matrix) {
   let row = matrix.length;
