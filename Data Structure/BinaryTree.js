@@ -1,9 +1,12 @@
+function TreeNode(val) {
+  this.val = val;
+  this.left = this.right = null;
+}
 //      4
 //    /   \
 //   2     7
 //  / \   / \
 // 1   3 6   9
-
 const root = {
   val: 4,
   left: {
@@ -215,6 +218,32 @@ const maxDepth2 = function (root) {
   let rightDepth = maxDepth2(root.right);
   return Math.max(leftDepth, rightDepth) + 1;
 };
+
+// leetcode 105 根据前序遍历序列和中序遍历序列（数组）重建二叉树
+
+/**
+ *
+ *
+ * @param {Array<number>} preOrder
+ * @param {Array<number>} inOrder
+ * @return {TreeNode} 创建的二叉树
+ */
+const buildTree = function (preOrder, inOrder) {
+  if (preOrder.length && inOrder.length) {
+    const node = preOrder.shift();
+    const nodeIdx = inOrder.indexOf(node);
+    const leftArr = inOrder.slice(0, nodeIdx);
+    const rightArr = inOrder.slice(nodeIdx + 1);
+
+    let treeNode = new TreeNode(node);
+    treeNode.left = buildTree(preOrder, leftArr);
+    treeNode.right = buildTree(preOrder, rightArr);
+    return treeNode;
+  } else {
+    return null;
+  }
+};
+// TODO 指针
 
 // leetcode 617 合并二叉树，递归实现
 function mergeTrees(t1, t2) {
