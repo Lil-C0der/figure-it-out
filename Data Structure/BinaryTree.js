@@ -1,3 +1,38 @@
+//      4
+//    /   \
+//   2     7
+//  / \   / \
+// 1   3 6   9
+
+const root = {
+  val: 4,
+  left: {
+    val: 2,
+    left: {
+      val: 1,
+      left: null,
+      right: null
+    },
+    right: {
+      val: 3,
+      left: null
+    }
+  },
+  right: {
+    val: 7,
+    left: {
+      val: 6,
+      left: null,
+      right: null
+    },
+    right: {
+      val: 9,
+      left: null,
+      right: null
+    }
+  }
+};
+
 // 广度优先遍历二叉树，迭代 + 队列实现
 const bfs = function (node) {
   let queue = [];
@@ -50,7 +85,7 @@ const invertTree = function (root) {
   return root;
 };
 
-// 翻转二叉树 迭代
+// 翻转二叉树 迭代，利用栈实现
 const invertTree2 = function (root) {
   let stack = [],
     node = null;
@@ -64,6 +99,39 @@ const invertTree2 = function (root) {
     }
   }
   return root;
+};
+
+// leetcode 104 二叉树的最大深度
+// 利用队列 bfs
+const maxDepth = function (root) {
+  if (!root) {
+    return 0;
+  }
+  let queue = [];
+  let depth = 0;
+  queue.push(root);
+  // 类似层次遍历
+  while (queue.length) {
+    // 当前层级的节点数目
+    const size = queue.length;
+    // 将下一层级的所有节点入队
+    for (let i = 0; i < size; i++) {
+      const node = queue.shift();
+      node.left && queue.push(node.left);
+      node.right && queue.push(node.right);
+    }
+    depth++;
+  }
+  return depth;
+};
+// 递归 dfs
+const maxDepth2 = function (root) {
+  if (!root) {
+    return 0;
+  }
+  let leftDepth = maxDepth2(root.left);
+  let rightDepth = maxDepth2(root.right);
+  return Math.max(leftDepth, rightDepth) + 1;
 };
 
 // leetcode 617 合并二叉树，递归实现
