@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    div {
+      box-sizing: border-box;
+    }
+    .wrapper {
+      padding: 20px;
+      width: 800px;
+      height: 200px;
+      border: 1px solid #000;
+    }
+    .btn {
+      display: inline-flex;
+      padding: 10px;
+      font-weight: 700;
+      color: #333;
+      background-color: #ccc;
+      border: 1px solid #666;
+      border-radius: 8px;
+      cursor: pointer;
+      user-select: none;
+      margin-right: 20px;
+      transition: all 0.3s;
+    }
+    .btn:hover {
+      transform: scale(1.1);
+    }
+    .btn:active {
+      color: #fff;
+      background-color: #333;
+    }
+  </style>
+  <body>
+    <h2>"INDEX"</h2>
+    <h4>currently running at port 5500 by Live Server</h4>
+    <div class="wrapper">
+      <div class="btn" id="btn_get">send a GET request</div>
+      <div class="btn" id="btn_post">send a POST request</div>
+    </div>
+  </body>
+
+  <script>
+    function ajax({
+      baseURL,
+      method,
+      header,
+      params = '',
+      body = '',
+      onSuccess
+    }) {
+      const xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = () => {
+        if (xhr.status === 200 && xhr.readyState === 4) {
+          const response = JSON.parse(xhr.response);
+          onSuccess(
+            method === 'GET' ? response.data : JSON.parse(response.body)
+          );
+        }
+      };
+
+      const url = method === 'GET' ? `${baseURL}?${params}` : baseURL;
+      xhr.open(method, url);
+      if (method === 'GET') {
+        xhr.send();
+      } else if (method === 'POST') {
+        xhr.send(JSON.stringify(body));
+      }
+    }
+
+    function onClick(e) {
+      const { id } = e.target;
+      function onSuccess(data) {
+        console.log('response', data);
+      }
+      const request = {
+        baseURL: 'http://127.0.0.1:8080',
+        method: id === 'btn_get' ? 'GET' : 'POST',
+        params: id === 'btn_get' ? 'username=lilC0der&key=321' : '',
+        body:
+          id === 'btn_post'
+            ? {
+                foo: 'a1',
+                bar: 'a2'
+              }
+            : '',
+        onSuccess
+      };
+
+      ajax(request);
+    }
+    // 事件委托
+    document.querySelector('.wrapper').addEventListener('click', onClick);
+    // 前端页面通过 Live Server 启动，在 5500 端口
+    // 后端 app.js 跑在 8080 端口，发送 AJAX 请求会发生跨域
+  </script>
+</html>
