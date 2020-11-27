@@ -47,6 +47,7 @@
   </body>
 
   <script>
+    // 普通 ajax 请求，支持 GET 和 POST 方法
     function ajax({
       baseURL,
       method,
@@ -74,6 +75,7 @@
       }
     }
 
+    // 利用 JSONP 的形式发送一个 AJAX 请求，数据拼接在 URL 中
     function jsonpAJAX(url, params, success, failed, timeout = 3000) {
       window[success.name] = success;
       let scriptEl = document.createElement('script');
@@ -87,10 +89,32 @@
       }, timeout);
     }
 
-    function callback(data) {
-      console.log(data);
+    // 用 promise 封装 jsonpAJAX 方法
+    function jsonpAJAXPromisify(url, params, timeout = 3000) {
+      funcName = 'jsonpCallback';
+
+      return new Promise((resolve, reject) => {
+        // 请求响应后调用这个方法
+        window[funcName] = (data) => {
+          // resolve 这个 promise
+          resolve(data);
+          setTimeout(() => {
+            delete window[funcName];
+            document.body.removeChild(scriptEl);
+          }, timeout);
+        };
+        let scriptEl = document.createElement('script');
+        scriptEl.src = `${url}?${params}&cb=${funcName}`;
+        scriptEl.type = 'text/javascript';
+        // 失败则将这个 promise reject
+        scriptEl.onerror = () => {
+          reject(`fetch ${scriptEl.src} failed`);
+        };
+        document.body.appendChild(scriptEl);
+      });
     }
 
+    // 点击按钮发送请求，事件委托
     function onClick(e) {
       const params = 'username=lilC0der&key=321';
       const body = {
@@ -102,25 +126,35 @@
         document.body.appendChild(textEl);
       }
       const { id } = e.target;
+      // 前端页面通过 Live Server 启动，在 5500 端口
+      // 后端 app.js 跑在 8080 端口，发送 AJAX 请求会发生跨域
       if (id === 'btn_jsonp') {
         // jsonp
-        jsonpAJAX('http://127.0.0.1:8080', params, onSuccess, (e) => {
-          console.log('err', e);
-        });
+        // jsonpAJAX('http://127.0.0.1:8081', params, onSuccess, (e) => {
+        //   console.log('err', e);
+        // });
+
+        // promisify 的 jsonp
+        jsonpAJAXPromisify('http://127.0.0.1:8080', params).then(
+          onSuccess,
+          (e) => {
+            console.log('err', e);
+          }
+        );
+
         return;
       }
-      const request = {
-        baseURL: 'http://127.0.0.1:8080',
-        method: id === 'btn_get' ? 'GET' : 'POST',
-        params: id === 'btn_get' ? params : '',
-        body: id === 'btn_post' ? body : '',
-        onSuccess
-      };
-      ajax(request);
+      if (id === 'btn_get' || id === 'btn_post') {
+        const request = {
+          baseURL: 'http://127.0.0.1:8080',
+          method: id === 'btn_get' ? 'GET' : 'POST',
+          params: id === 'btn_get' ? params : '',
+          body: id === 'btn_post' ? body : '',
+          onSuccess
+        };
+        ajax(request);
+      }
     }
-    // 事件委托
     document.querySelector('.wrapper').addEventListener('click', onClick);
-    // 前端页面通过 Live Server 启动，在 5500 端口
-    // 后端 app.js 跑在 8080 端口，发送 AJAX 请求会发生跨域
   </script>
 </html>

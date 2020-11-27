@@ -38,6 +38,7 @@ server.on('request', (request, response) => {
       // 拼接前端传的 callback，并作为 body 响应
       str = `${queryObj.cb}(${JSON.stringify(data)})`;
       response.writeHead(200, responseHeaders);
+      console.log('jsonp');
       return response.end(str);
     }
     const responseBody = { url, method, headers, data };
