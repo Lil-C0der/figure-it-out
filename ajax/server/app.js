@@ -11,6 +11,7 @@ server.on('request', (request, response) => {
   const queryObj = queryString.parse(params.query);
   const responseHeaders = {
     'Content-Type': 'application/json',
+    // CORS
     'Access-Control-Allow-Origin': '*'
   };
 
@@ -32,8 +33,15 @@ server.on('request', (request, response) => {
     const data = queryObj;
     data.key = queryObj.key + queryObj.username;
     data.greeting = `hello ${data.username}, your key is ${data.key}`;
-
+    // jsonp
+    if (queryObj.cb) {
+      // 拼接前端传的 callback，并作为 body 响应
+      str = `${queryObj.cb}(${JSON.stringify(data)})`;
+      response.writeHead(200, responseHeaders);
+      return response.end(str);
+    }
     const responseBody = { url, method, headers, data };
+
     response.writeHead(200, responseHeaders);
     response.write(JSON.stringify(responseBody));
     response.end();

@@ -42,6 +42,7 @@
     <div class="wrapper">
       <div class="btn" id="btn_get">send a GET request</div>
       <div class="btn" id="btn_post">send a POST request</div>
+      <div class="btn" id="btn_jsonp">send a GET request (JSONP)</div>
     </div>
   </body>
 
@@ -73,25 +74,48 @@
       }
     }
 
+    function jsonpAJAX(url, params, success, failed, timeout = 3000) {
+      window[success.name] = success;
+      let scriptEl = document.createElement('script');
+      scriptEl.src = `${url}?${params}&cb=${success.name}`;
+      scriptEl.type = 'text/javascript';
+      scriptEl.onerror = failed;
+      document.body.appendChild(scriptEl);
+      setTimeout(() => {
+        delete window[success.name];
+        document.body.removeChild(scriptEl);
+      }, timeout);
+    }
+
+    function callback(data) {
+      console.log(data);
+    }
+
     function onClick(e) {
-      const { id } = e.target;
+      const params = 'username=lilC0der&key=321';
+      const body = {
+        foo: 'a1',
+        bar: 'a2'
+      };
       function onSuccess(data) {
-        console.log('response', data);
+        let textEl = document.createTextNode(JSON.stringify(data));
+        document.body.appendChild(textEl);
+      }
+      const { id } = e.target;
+      if (id === 'btn_jsonp') {
+        // jsonp
+        jsonpAJAX('http://127.0.0.1:8080', params, onSuccess, (e) => {
+          console.log('err', e);
+        });
+        return;
       }
       const request = {
         baseURL: 'http://127.0.0.1:8080',
         method: id === 'btn_get' ? 'GET' : 'POST',
-        params: id === 'btn_get' ? 'username=lilC0der&key=321' : '',
-        body:
-          id === 'btn_post'
-            ? {
-                foo: 'a1',
-                bar: 'a2'
-              }
-            : '',
+        params: id === 'btn_get' ? params : '',
+        body: id === 'btn_post' ? body : '',
         onSuccess
       };
-
       ajax(request);
     }
     // 事件委托
