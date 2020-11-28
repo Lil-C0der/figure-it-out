@@ -93,3 +93,62 @@ function rotateMatrixByMap(matrix) {
   console.log(matrix);
 }
 // rotateMatrixByMap(matrix);
+
+/**
+ * leetcode 54. 螺旋矩阵
+ * 给定一个包含 m x n 个元素的矩阵（m 行, n 列），请按照顺时针螺旋顺序，返回矩阵中的所有元素。
+ * 输入:
+ * [
+ *   [ 1, 2, 3 ],
+ *   [ 4, 5, 6 ],
+ *   [ 7, 8, 9 ]
+ * ]
+ * 输出: [1,2,3,6,9,8,7,4,5]
+ * @param {Array<Array<number>>} matrix
+ * @return {Array<number>}
+ * 通过上下左右四个代表矩阵边界位置的指针，按顺序遍历矩阵并将对应元素 push 到结果数组中
+ */
+function spiralOrder(matrix) {
+  let top = 0,
+    bottom = matrix.length - 1,
+    left = 0,
+    right = matrix[0].length - 1;
+  // 矩阵中元素的个数，方便遍历时及时终止遍历
+  let size = (right + 1) * (bottom + 1);
+  let res = [];
+  while (top <= bottom && left <= right) {
+    // 遍历矩阵上方（第一行）的元素
+    for (let i = left; i <= right; i++) {
+      res.push(matrix[top][i]);
+    }
+    top++;
+    // 遍历矩阵右边（最后一列）的元素
+    for (let i = top; i <= bottom; i++) {
+      res.push(matrix[i][right]);
+    }
+    right--;
+    // 注意：在遍历过程中有可能已经遍历完所有的元素了，需要break 停止遍历
+    if (res.length === size) {
+      break;
+    }
+    // 遍历矩阵底边（最后一行）的元素
+    for (let i = right; i >= left; i--) {
+      res.push(matrix[bottom][i]);
+    }
+    bottom--;
+    // 遍历矩阵左边（第一列）的元素
+    for (let i = bottom; i <= top; i++) {
+      res.push(matrix[i][left]);
+    }
+    left++;
+  }
+
+  return res;
+}
+let matrix1 = [
+  [1, 2, 3, 4],
+  [5, 6, 7, 8],
+  [9, 10, 11, 12]
+];
+// console.log(spiralOrder(matrix));  //  [1,2,3,6,9,8,7,4,5]
+// console.log(spiralOrder(matrix1)); //  [1,2,3,4,8,12,11,10,9,5,6,7]
