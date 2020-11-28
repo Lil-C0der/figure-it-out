@@ -62,3 +62,30 @@ function cuttingRope2(n) {
   return dp[n];
 }
 // console.log(cuttingRope2(10));
+
+/**
+ * leetcode 300. 最长上升子序列
+ * 给定一个无序的整数数组，找到其中最长上升子序列的长度。
+ * 子序列，并非连续子序列；上升，指大于，不包括等于。
+ * 对于数组 [0, 1, 0, 3, 2, 3]，其最长的连续子序列是 [0, 1, 2, 3]，并不连续
+ * @param {Array<number>} nums
+ * @return {number}
+ */
+function lengthOfLIS(nums) {
+  // dp[n] 表示：以 nums[n] 结尾的、最长上升子序列的长度
+  // 需要将各元素初始化为 1，表示子序列只包含自身，长度为 1
+  let dp = new Array(nums.length).fill(1);
+
+  for (let i = 1; i < nums.length; i++) {
+    // 在 [0, i] 这个区间内，计算最长的上升子序列的长度
+    for (let j = 0; j < i; j++) {
+      // 将 nums[i] 添加到 [0, j] 区间内的子序列后，构造出更长的子序列
+      if (nums[i] > nums[j]) {
+        dp[i] = Math.max(dp[j] + 1, dp[i]);
+      }
+    }
+  }
+  console.log(dp);
+  return Math.max(...dp);
+}
+// console.log(lengthOfLIS([0, 1, 0, 3, 2, 3]));
