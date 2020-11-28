@@ -68,3 +68,46 @@ function deleteNode(head, val) {
 // 分别删除中间的节点和头节点
 // console.log(deleteNode(linkList, 3));
 // console.log(deleteNode(linkList, 1));
+
+/**
+ * leetcode 2. 两数相加
+ * 给出两个 非空 的链表用来表示两个非负的整数。其中，它们各自的位数是按照 逆序 的方式存储的，并且它们的每个节点只能存储 一位 数字。
+ * 如果，我们将这两个数相加起来，则会返回一个新的链表来表示它们的和。
+ * 您可以假设除了数字 0 之外，这两个数都不会以 0 开头。
+ * 示例：
+ * 输入：(2 -> 4 -> 3) + (5 -> 6 -> 4)
+ * 输出：7 -> 0 -> 8
+ * 原因：342 + 465 = 807
+ *
+ * @param {ListNode} l1
+ * @param {ListNode} l2
+ * @return {ListNode}
+ */
+function addTwoNumbers(l1, l2) {
+  let curr1 = l1,
+    curr2 = l2;
+  // 有可能链表 l1 的长度 < l2，l1 需要新建节点
+  // 所以 prev1 用于记录链表 l1 当前节点的前一个节点，将新增的节点挂在前一个节点上
+  let prev1 = curr1;
+  let over = 0;
+  // 对于模拟加法的处理，注意循环的条件需要加上控制进位的 over，因为相加后，数位可能增加，例如两位数 => 三位数
+  while (curr1 || curr2 || over) {
+    let val1 = curr1?.val || 0,
+      val2 = curr2?.val || 0;
+    // 在 l1 的基础上相加
+    if (!curr1) {
+      let newNode = new ListNode((val1 + val2 + over) % 10);
+      prev1?.next = newNode;
+      // 指针 curr1 指向新增的节点
+      curr1 = newNode;
+    } else {
+      curr1.val = (val1 + val2 + over) % 10;
+    }
+    // 处理进位
+    over = val1 + val2 + over >= 10 ? 1 : 0;
+    prev1 = curr1;
+    curr1 = curr1?.next;
+    curr2 = curr2?.next;
+  }
+  return l1;
+}
