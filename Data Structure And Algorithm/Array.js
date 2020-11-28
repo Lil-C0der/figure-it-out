@@ -38,4 +38,58 @@ function printNumbers(n) {
     return baseArr;
   }
 }
-printNumbers(2);
+// printNumbers(2);
+
+/**
+ * leetcode 48. 旋转图像
+ * 给定一个 n × n 的二维矩阵表示一个图像，将图像顺时针旋转 90 度。 必须在原地旋转图像，请不要使用另一个矩阵来旋转图像。
+ * [                   [
+ *  [1,2,3],             [7,4,1],
+ *  [4,5,6],    =>       [8,5,2],
+ *  [7,8,9]              [9,6,3]
+ * ]                   ]
+ * @param {Array<Array<number>>} matrix
+ */
+function rotateMatrix(matrix) {
+  let len = matrix.length;
+  // 可以发现；旋转后的矩阵的每一行就是原先矩阵的每一列
+  // 所以考虑遍历矩阵的每一列，将各元素作为新的行，push 到矩阵中，然后通过 splice 方法移除原先的行
+  for (let i = 0; i < len; i++) {
+    // 新增的行，存放遍历的结果
+    let newRow = [];
+    for (let j = len - 1; j >= 0; j--) {
+      newRow.push(matrix[j][i]);
+    }
+    // 将遍历的结果push到矩阵中
+    matrix.push(newRow);
+  }
+  // 删除矩阵原先的行
+  matrix.splice(0, len);
+  console.log(matrix);
+}
+let matrix = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9]
+];
+// rotateMatrix(matrix);
+
+// 找规律，利用 map 记录翻转后索引和元素的关系
+function rotateMatrixByMap(matrix) {
+  // 可以发现：对于索引为 [i][j] 这个位置，翻转后这个位置的元素是原先索引为 [len - 1 - j][i] 的元素
+  // 所以利用map来记录这个对应关系，再遍历矩阵，替换对应的元素，需要遍历两次矩阵
+  let len = matrix.length;
+  let map = new Map();
+  for (let i = 0; i < len; i++) {
+    for (let j = 0; j < len; j++) {
+      map.set(`${i}-${j}`, matrix[len - 1 - j][i]);
+    }
+  }
+  for (let i = 0; i < len; i++) {
+    for (let j = 0; j < len; j++) {
+      matrix[i][j] = map.get(`${i}-${j}`);
+    }
+  }
+  console.log(matrix);
+}
+// rotateMatrixByMap(matrix);
