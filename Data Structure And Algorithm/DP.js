@@ -143,3 +143,30 @@ function rob(nums) {
   }
   return dp[nums.length - 1];
 }
+
+/**
+ * leetcode 62. 不同路径
+ * 一个机器人位于一个 m * n 网格的左上角，机器人每次只能向下或者向右移动一步。
+ * 如果机器人想要到达网格的右下角，问总共有多少条不同的路径？
+ * @param {number} m
+ * @param {number} n
+ * @return {number}
+ * 考虑使用 dp，建立二维数组，dp[i][j] 表示想要到达坐标为 (i, j) 的点，有多少条路径
+ * 行和列上所有的元素都为 1：因为坐标为 (0, j) 和 (i, 0) 的点，只有一条路径能够到达
+ * 对于其他点，则 dp[i][j] = dp[i - 1][j] + dp[i][j - 1]，因为机器人可以向右走，或者向下走，有两个方向可以到达这个点
+ */
+function uniquePaths(m, n) {
+  let dp = new Array(m);
+
+  for (let i = 0; i < m; i++) {
+    dp[i] = new Array(n);
+    for (let j = 0; j < n; j++) {
+      if (i === 0 || j === 0) {
+        dp[i][j] = 1;
+      } else {
+        dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+      }
+    }
+  }
+  return dp[m - 1][n - 1];
+}
