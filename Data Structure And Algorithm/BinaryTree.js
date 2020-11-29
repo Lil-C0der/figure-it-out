@@ -50,8 +50,6 @@ const bfs = function (node) {
   return res;
 };
 
-bfs(root);
-
 // dfs 递归实现
 let res = [];
 const dfs = function (node) {
@@ -63,7 +61,7 @@ const dfs = function (node) {
 };
 
 // dfs 迭代 + 栈实现
-const dfs = function (node) {
+const dfs2 = function (node) {
   let stack = [];
   let res = [];
   stack.push(node);
@@ -75,8 +73,6 @@ const dfs = function (node) {
   }
   return res;
 };
-
-dfs(root);
 
 // 递归的前序遍历
 const preOrder = function (root) {
@@ -277,3 +273,51 @@ function mergeTrees(t1, t2) {
   }
   return t1;
 }
+
+/**
+ * leetcode 513. 找树左下角的值
+ * 给定一个二叉树，在树的最后一行找到最左边的值。
+ * @param {TreeNode} root
+ * @return {number}
+ * 需要返回最后一行，最左的值：考虑通过层次遍历，记录深度 depth 和 各层的节点，最后返回最后一层的第一个节点
+ */
+function findBottomLeftValue(root) {
+  let valArr = [];
+  bfs(root, valArr);
+  let temp = valArr.pop();
+  return temp ? temp : 0;
+
+  function bfs(root, res) {
+    let queue = [];
+    let depth = 0;
+    queue.push(root);
+    while (queue.length) {
+      // size 表示当前层次的节点个数
+      let size = queue.length;
+      for (let i = 0; i < size; i++) {
+        let node = queue.shift();
+        if (node) {
+          // push 的时候可以判断，只push当前层级的第一个节点
+          // 如depth为1时，res长度也为1，则说明第2层的节点还没push
+          res.length === depth && res.push(node.val);
+          node.left && queue.push(node.left);
+          node.right && queue.push(node.right);
+        }
+      }
+      depth++;
+    }
+  }
+}
+// console.log('res', findBottomLeftValue(root));
+// console.log(
+//   'res',
+//   findBottomLeftValue({
+//     val: 1,
+//     left: { val: 2, left: { val: 4 }, right: null },
+//     right: {
+//       val: 3,
+//       left: { val: 5, left: { val: 7 }, right: null },
+//       right: { val: 6 }
+//     }
+//   })
+// );
