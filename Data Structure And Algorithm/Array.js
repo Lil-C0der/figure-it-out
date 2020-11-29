@@ -152,3 +152,37 @@ let matrix1 = [
 ];
 // console.log(spiralOrder(matrix));  //  [1,2,3,6,9,8,7,4,5]
 // console.log(spiralOrder(matrix1)); //  [1,2,3,4,8,12,11,10,9,5,6,7]
+
+/**
+ * 剑指 Offer 57 - II. 和为s的连续正数序列
+ * 输入一个正整数 target ，输出所有和为 target 的连续正整数序列（至少含有两个数）。
+ * 序列内的数字由小到大排列，不同序列按照首个数字从小到大排列。
+ * 输入：target = 9
+ * 输出：[[2,3,4],[4,5]]
+ * 输入：target = 15
+ * 输出：[[1,2,3,4,5],[4,5,6],[7,8]]
+ * @param {number} target
+ * @return {Array<Array<number>>}
+ * 可以考虑通过数学来解决，即等差数列之和
+ * 题目给出了数列之和，可以通过循环，计算出项数 n 不同时，首项 a1 的值：
+ */
+function findContinuousSequence(target) {
+  let res = [];
+  // 项数 n 至少为两位
+  for (let n = 2; n < target; n++) {
+    // 计算出首项 a1
+    let a1 = target / n - (n - 1) / 2;
+    // 存放和为 target 的数组
+    let arr = [a1];
+    // 首项 a1 大于 0，且是一个整数
+    if (a1 > 0 && a1 % 1 === 0) {
+      // 从 a1 开始，push n 项
+      for (let i = 1; i < n; i++) {
+        arr.push(a1 + i);
+      }
+      res.push(arr);
+    }
+  }
+  return res.reverse();
+}
+console.log(findContinuousSequence(9), findContinuousSequence(15));
