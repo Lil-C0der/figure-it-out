@@ -89,3 +89,32 @@ function lengthOfLIS(nums) {
   return Math.max(...dp);
 }
 // console.log(lengthOfLIS([0, 1, 0, 3, 2, 3]));
+
+/**
+ * leetcode 121. 买卖股票的最佳时机
+ * 一个数组的第 i 个元素是一支股票第 i 天的价格。
+ * 只允许完成一笔交易（即买入和卖出一支股票一次），设计一个算法来计算所能获取的最大利润。
+ * @param {Array<number>} prices
+ * @return {number}
+ * 注意：不能在买入股票前卖出股票。
+ * 输入: [7,1,5,3,6,4]
+ * 输出: 5
+ * 解释: 在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5。
+ * 注意利润不能是 7-1 = 6, 因为不能在买入前卖出股票。
+ */
+function maxProfit(prices) {
+  let buyIn = Number.MAX_SAFE_INTEGER;
+  let profit = 0;
+  for (const price of prices) {
+    // 判断合适的买入的价格
+    buyIn = Math.min(price, buyIn);
+    // 当前价格 - 买入价格为利润，需要判断取较大值
+    profit = Math.max(price - buyIn, profit);
+  }
+  return profit;
+}
+// console.log(
+//   maxProfit([7, 1, 5, 3, 6, 4]),
+//   maxProfit([1, 2, 3, 4]),
+//   maxProfit([4, 3, 2, 1])
+// );
