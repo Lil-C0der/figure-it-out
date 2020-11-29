@@ -118,3 +118,28 @@ function maxProfit(prices) {
 //   maxProfit([1, 2, 3, 4]),
 //   maxProfit([4, 3, 2, 1])
 // );
+
+/**
+ *
+ * leetcode 198. 打家劫舍
+ * 如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。
+ * 给定一个代表每个房屋存放金额的非负整数数组，计算在不触动警报装置的情况下，能够偷窃到的最高金额。
+ * @param {Array<number>} nums
+ * @return {number}
+ */
+function rob(nums) {
+  if (!nums.length) {
+    return 0;
+  }
+  // dp[n] 表示前 n 间房能偷窃到的最高金额
+  let dp = [];
+  dp[0] = nums[0];
+  dp[1] = Math.max(nums[0], nums[1]);
+
+  for (let i = 2; i < nums.length; i++) {
+    // 对于第 i 间房，可以选择偷或者不偷
+    // 如果偷，金额就是前 i - 2 间房的金额 + 这间房的金额；不偷则金额不变，和 i - 1 间房的金额相同
+    dp[i] = Math.max(dp[i - 2] + nums[i], dp[i - 1]);
+  }
+  return dp[nums.length - 1];
+}
