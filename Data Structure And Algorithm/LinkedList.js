@@ -97,7 +97,9 @@ function addTwoNumbers(l1, l2) {
     // 在 l1 的基础上相加
     if (!curr1) {
       let newNode = new ListNode((val1 + val2 + over) % 10);
-      prev1?.next = newNode;
+      if (prev1) {
+        prev1.next = newNode;
+      }
       // 指针 curr1 指向新增的节点
       curr1 = newNode;
     } else {
