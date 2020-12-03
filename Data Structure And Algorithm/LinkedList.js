@@ -13,6 +13,34 @@ const linkList = {
     }
   }
 };
+/**
+ * 根据数组生成链表，节点值为数组元素
+ * @param {number} val
+ * @return {ListNode}
+ */
+function generateLinkedListByNums(...args) {
+  let head = new ListNode(args[0]);
+  let curr = head;
+  for (let i = 1; i < args.length; i++) {
+    curr.next = new ListNode(args[i]);
+    curr = curr.next;
+  }
+  return head;
+}
+
+/**
+ *
+ * 输入链表头节点，遍历各节点，返回各节点值
+ * @param {ListNode} head
+ * @return {Array<number>}
+ */
+function traverseLinkedList(head, res = []) {
+  while (head) {
+    res.push(head.val);
+    head = head.next;
+  }
+  return res;
+}
 
 /**
  * 翻转链表
@@ -113,3 +141,85 @@ function addTwoNumbers(l1, l2) {
   }
   return l1;
 }
+// console.log(
+//   2, 0, 2
+//   traverseLinkedList(
+//     addTwoNumbers(
+//       generateLinkedListByNums(9, 0, 1),
+//       generateLinkedListByNums(3, 9)
+//     )
+//   )
+// );
+
+/**
+ * 剑指 Offer 22. 链表中倒数第k个节点
+ * 输入一个链表，输出该链表中倒数第k个节点。
+ * 示例：给定一个链表: 1->2->3->4->5, 和 k = 2
+ * 返回链表 4->5
+ * @param {ListNode} head
+ * @param {number} k
+ * @return {ListNode}
+ * 快慢指针
+ */
+function getKthFromEnd(head, k) {
+  let fast = head,
+    slow = head;
+  for (let i = 0; i < k; i++) {
+    if (fast) {
+      fast = fast.next;
+    } else {
+      break;
+    }
+  }
+  while (slow && fast) {
+    fast = fast.next;
+    slow = slow.next;
+  }
+  return slow;
+}
+// console.log(
+//   traverseLinkedList(getKthFromEnd(generateLinkedListByNums(1, 2, 3, 4, 5), 2))
+// );
+
+/**
+ * leetcode 19. 删除链表的倒数第N个节点
+ * 给定一个链表，删除链表的倒数第 n 个节点，并且返回链表的头结点。
+ * 给定一个链表: 1->2->3->4->5, 和 n = 2
+ * 当删除了倒数第二个节点后，链表变为 1->2->3->5.
+ * @param {ListNode} head
+ * @param {number} n
+ * @return {ListNode}
+ * 快慢指针
+ */
+function removeNthFromEnd(head, n) {
+  let fast = head,
+    slow = head,
+    prev = null;
+  // 一次遍历
+  while (slow && fast) {
+    if (n > 0) {
+      // 快指针先走
+      fast = fast.next;
+      n--;
+    } else {
+      prev = slow;
+      slow = slow.next;
+      fast = fast.next;
+    }
+  }
+  if (prev) {
+    prev.next = slow.next;
+  } else {
+    // 如果 prev 为 null，表明被删除的是链表的头节点
+    head = head.next;
+  }
+  return head;
+}
+// console.log(
+//   traverseLinkedList(
+//     removeNthFromEnd(generateLinkedListByNums(1, 2, 3, 4, 5), 2)
+//   ),
+//   traverseLinkedList(
+//     removeNthFromEnd(generateLinkedListByNums(1, 2, 3, 4, 5), 5)
+//   )
+// );
